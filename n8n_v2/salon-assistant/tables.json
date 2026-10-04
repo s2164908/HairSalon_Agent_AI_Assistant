@@ -1,0 +1,854 @@
+{
+  "salon_services": {
+    "columns": [
+      {
+        "name": "service_id",
+        "type": "string"
+      },
+      {
+        "name": "name",
+        "type": "string"
+      },
+      {
+        "name": "name_zh",
+        "type": "string"
+      },
+      {
+        "name": "active",
+        "type": "boolean"
+      },
+      {
+        "name": "price",
+        "type": "number"
+      },
+      {
+        "name": "currency",
+        "type": "string"
+      },
+      {
+        "name": "duration_min",
+        "type": "number"
+      },
+      {
+        "name": "requires_consult",
+        "type": "boolean"
+      },
+      {
+        "name": "allowed_stylist_levels",
+        "type": "string"
+      }
+    ],
+    "rows": [
+      {
+        "service_id": "svc_cut_women",
+        "name": "Women's Cut & Style",
+        "name_zh": "女士剪发造型",
+        "active": true,
+        "price": 85,
+        "currency": "AUD",
+        "duration_min": 60,
+        "requires_consult": false,
+        "allowed_stylist_levels": "[\"junior\",\"senior\",\"director\"]"
+      },
+      {
+        "service_id": "svc_cut_men",
+        "name": "Men's Cut",
+        "name_zh": "男士剪发",
+        "active": true,
+        "price": 45,
+        "currency": "AUD",
+        "duration_min": 30,
+        "requires_consult": false,
+        "allowed_stylist_levels": "[\"junior\",\"senior\",\"director\"]"
+      },
+      {
+        "service_id": "svc_cut_curly",
+        "name": "Curly Cut (dry)",
+        "name_zh": "卷发干剪",
+        "active": true,
+        "price": 130,
+        "currency": "AUD",
+        "duration_min": 90,
+        "requires_consult": false,
+        "allowed_stylist_levels": "[\"senior\",\"director\"]"
+      },
+      {
+        "service_id": "svc_cut_fringe",
+        "name": "Fringe Trim",
+        "name_zh": "刘海修剪",
+        "active": true,
+        "price": 20,
+        "currency": "AUD",
+        "duration_min": 15,
+        "requires_consult": false,
+        "allowed_stylist_levels": "[\"junior\",\"senior\",\"director\"]"
+      },
+      {
+        "service_id": "svc_color_root",
+        "name": "Root Touch-up",
+        "name_zh": "补根染",
+        "active": true,
+        "price": 130,
+        "currency": "AUD",
+        "duration_min": 90,
+        "requires_consult": false,
+        "allowed_stylist_levels": "[\"senior\",\"director\"]"
+      },
+      {
+        "service_id": "svc_color_balayage",
+        "name": "Balayage",
+        "name_zh": "手绘挑染",
+        "active": true,
+        "price": 320,
+        "currency": "AUD",
+        "duration_min": 180,
+        "requires_consult": true,
+        "allowed_stylist_levels": "[\"senior\",\"director\"]"
+      },
+      {
+        "service_id": "svc_color_full_bleach",
+        "name": "Full Bleach & Tone",
+        "name_zh": "全头漂染",
+        "active": true,
+        "price": 420,
+        "currency": "AUD",
+        "duration_min": 240,
+        "requires_consult": true,
+        "allowed_stylist_levels": "[\"director\"]"
+      },
+      {
+        "service_id": "svc_perm_korean",
+        "name": "Korean Digital Perm",
+        "name_zh": "韩式数码烫",
+        "active": true,
+        "price": 350,
+        "currency": "AUD",
+        "duration_min": 210,
+        "requires_consult": true,
+        "allowed_stylist_levels": "[\"senior\",\"director\"]"
+      },
+      {
+        "service_id": "svc_treat_keratin",
+        "name": "Keratin Smoothing",
+        "name_zh": "角蛋白顺滑",
+        "active": true,
+        "price": 290,
+        "currency": "AUD",
+        "duration_min": 180,
+        "requires_consult": true,
+        "allowed_stylist_levels": "[\"senior\",\"director\"]"
+      },
+      {
+        "service_id": "svc_treat_olaplex",
+        "name": "Olaplex Bond Treatment",
+        "name_zh": "Olaplex 结构修复",
+        "active": true,
+        "price": 75,
+        "currency": "AUD",
+        "duration_min": 45,
+        "requires_consult": false,
+        "allowed_stylist_levels": "[\"junior\",\"senior\",\"director\"]"
+      },
+      {
+        "service_id": "svc_blowdry",
+        "name": "Blow Dry & Style",
+        "name_zh": "吹造型",
+        "active": true,
+        "price": 55,
+        "currency": "AUD",
+        "duration_min": 45,
+        "requires_consult": false,
+        "allowed_stylist_levels": "[\"junior\",\"senior\",\"director\"]"
+      },
+      {
+        "service_id": "svc_retired_test",
+        "name": "Retired Service (inactive)",
+        "name_zh": "已下架测试项",
+        "active": false,
+        "price": 10,
+        "currency": "AUD",
+        "duration_min": 10,
+        "requires_consult": false,
+        "allowed_stylist_levels": "[]"
+      }
+    ]
+  },
+  "salon_promotions": {
+    "columns": [
+      {
+        "name": "promotion_id",
+        "type": "string"
+      },
+      {
+        "name": "title",
+        "type": "string"
+      },
+      {
+        "name": "title_zh",
+        "type": "string"
+      },
+      {
+        "name": "active",
+        "type": "boolean"
+      },
+      {
+        "name": "valid_from",
+        "type": "string"
+      },
+      {
+        "name": "valid_to",
+        "type": "string"
+      },
+      {
+        "name": "channels",
+        "type": "string"
+      },
+      {
+        "name": "eligibility",
+        "type": "string"
+      },
+      {
+        "name": "discount",
+        "type": "string"
+      }
+    ],
+    "rows": [
+      {
+        "promotion_id": "promo_first_visit",
+        "title": "First Visit — 20% off any cut",
+        "title_zh": "首次到店 —— 剪发 8 折",
+        "active": true,
+        "valid_from": "2026-01-01",
+        "valid_to": "2026-12-31",
+        "channels": "[\"web\",\"instagram\",\"whatsapp\"]",
+        "eligibility": "{\"completed_appointments_max\":0,\"service_ids\":[\"svc_cut_women\",\"svc_cut_men\",\"svc_cut_curly\"]}",
+        "discount": "{\"type\":\"percent\",\"value\":20}"
+      },
+      {
+        "promotion_id": "promo_midweek",
+        "title": "Midweek Special — 15% off before 3pm",
+        "title_zh": "周中优惠 —— 下午三点前 85 折",
+        "active": true,
+        "valid_from": "2026-07-01",
+        "valid_to": "2026-10-31",
+        "channels": "[\"web\",\"instagram\",\"whatsapp\"]",
+        "eligibility": "{\"days_of_week\":[\"TUE\",\"WED\",\"THU\"],\"start_time_before\":\"15:00\",\"service_ids\":\"any\"}",
+        "discount": "{\"type\":\"percent\",\"value\":15}"
+      },
+      {
+        "promotion_id": "promo_olaplex_bundle",
+        "title": "Olaplex add-on with any colour service — $45 (save $30)",
+        "title_zh": "染发加购 Olaplex —— $45（省 $30）",
+        "active": true,
+        "valid_from": "2026-08-01",
+        "valid_to": "2026-11-30",
+        "channels": "[\"web\",\"instagram\",\"whatsapp\"]",
+        "eligibility": "{\"requires_service_in_same_booking\":[\"svc_color_root\",\"svc_color_balayage\",\"svc_color_full_bleach\"]}",
+        "discount": "{\"type\":\"fixed_price\",\"value\":45,\"applies_to_service_id\":\"svc_treat_olaplex\"}"
+      },
+      {
+        "promotion_id": "promo_eofy_expired",
+        "title": "EOFY Colour Sale — 25% off",
+        "title_zh": "财年末染发特惠 —— 75 折",
+        "active": true,
+        "valid_from": "2026-05-15",
+        "valid_to": "2026-06-30",
+        "channels": "[\"web\",\"instagram\"]",
+        "eligibility": "{\"service_ids\":[\"svc_color_balayage\",\"svc_color_full_bleach\"]}",
+        "discount": "{\"type\":\"percent\",\"value\":25}"
+      },
+      {
+        "promotion_id": "promo_open_all",
+        "title": "Spring Refresh - 10% off any service",
+        "title_zh": "春季焕新 全场 9 折",
+        "active": true,
+        "valid_from": "2026-09-01",
+        "valid_to": "2026-12-31",
+        "channels": "[\"web\",\"instagram\"]",
+        "eligibility": "{\"everyone\":true}",
+        "discount": "{\"type\":\"percent\",\"value\":10}"
+      },
+      {
+        "promotion_id": "promo_everyone_cut",
+        "title": "Cut Week - $10 off cuts",
+        "title_zh": "剪发周 减 10 元",
+        "active": true,
+        "valid_from": "2026-09-07",
+        "valid_to": "2026-09-30",
+        "channels": "[\"web\"]",
+        "eligibility": "{\"everyone\":true,\"service_ids\":[\"svc_cut_women\",\"svc_cut_men\"]}",
+        "discount": "{\"type\":\"amount\",\"value\":10}"
+      },
+      {
+        "promotion_id": "promo_expired_everyone",
+        "title": "EOFY Everyone 25% off",
+        "title_zh": "财年末全场 75 折",
+        "active": true,
+        "valid_from": "2026-05-15",
+        "valid_to": "2026-06-30",
+        "channels": "[\"web\"]",
+        "eligibility": "{\"everyone\":true}",
+        "discount": "{\"type\":\"percent\",\"value\":25}"
+      }
+    ]
+  },
+  "salon_stylists": {
+    "columns": [
+      {
+        "name": "stylist_id",
+        "type": "string"
+      },
+      {
+        "name": "name",
+        "type": "string"
+      },
+      {
+        "name": "active",
+        "type": "boolean"
+      },
+      {
+        "name": "price_tier",
+        "type": "number"
+      },
+      {
+        "name": "specialties",
+        "type": "string"
+      },
+      {
+        "name": "hair_experience",
+        "type": "string"
+      },
+      {
+        "name": "languages",
+        "type": "string"
+      }
+    ],
+    "rows": [
+      {
+        "stylist_id": "stl_amy",
+        "name": "Amy Chen",
+        "active": true,
+        "price_tier": 2,
+        "specialties": "[\"sty_korean_perm\",\"sty_layered_lob\",\"sty_curtain_bangs\",\"sty_balayage\"]",
+        "hair_experience": "[\"straight\",\"wavy\"]",
+        "languages": "[\"en\",\"zh\"]"
+      },
+      {
+        "stylist_id": "stl_marco",
+        "name": "Marco Ferrari",
+        "active": true,
+        "price_tier": 3,
+        "specialties": "[\"sty_full_bleach_tone\",\"sty_balayage\",\"sty_pixie\",\"sty_wolf_cut\"]",
+        "hair_experience": "[\"straight\",\"wavy\",\"curly\"]",
+        "languages": "[\"en\",\"it\"]"
+      },
+      {
+        "stylist_id": "stl_priya",
+        "name": "Priya Raman",
+        "active": true,
+        "price_tier": 2,
+        "specialties": "[\"sty_curly_shape\",\"sty_keratin_smooth\",\"sty_layered_lob\"]",
+        "hair_experience": "[\"curly\",\"coily\",\"wavy\"]",
+        "languages": "[\"en\",\"ta\",\"hi\"]"
+      },
+      {
+        "stylist_id": "stl_jayden",
+        "name": "Jayden Wu",
+        "active": true,
+        "price_tier": 1,
+        "specialties": "[\"sty_buzz_fade\",\"sty_curtain_bangs\"]",
+        "hair_experience": "[\"straight\",\"wavy\"]",
+        "languages": "[\"en\",\"zh\"]"
+      },
+      {
+        "stylist_id": "stl_sofia",
+        "name": "Sofia Alvarez",
+        "active": false,
+        "price_tier": 2,
+        "specialties": "[\"sty_balayage\",\"sty_layered_lob\",\"sty_root_touchup\"]",
+        "hair_experience": "[\"straight\",\"wavy\"]",
+        "languages": "[\"en\",\"es\"]"
+      }
+    ]
+  },
+  "salon_style_taxonomy": {
+    "columns": [
+      {
+        "name": "taxonomy_id",
+        "type": "string"
+      },
+      {
+        "name": "name_en",
+        "type": "string"
+      },
+      {
+        "name": "name_zh",
+        "type": "string"
+      },
+      {
+        "name": "category",
+        "type": "string"
+      },
+      {
+        "name": "aliases",
+        "type": "string"
+      }
+    ],
+    "rows": [
+      {
+        "taxonomy_id": "sty_blunt_bob",
+        "name_en": "Blunt Bob",
+        "name_zh": "齐颈波波头",
+        "category": "cut",
+        "aliases": "[\"bob\",\"blunt bob\",\"波波头\"]"
+      },
+      {
+        "taxonomy_id": "sty_layered_lob",
+        "name_en": "Layered Lob",
+        "name_zh": "齐肩层次发",
+        "category": "cut",
+        "aliases": "[\"lob\",\"long bob\",\"layered lob\",\"齐肩\"]"
+      },
+      {
+        "taxonomy_id": "sty_curtain_bangs",
+        "name_en": "Curtain Bangs",
+        "name_zh": "八字刘海",
+        "category": "cut",
+        "aliases": "[\"curtain bangs\",\"curtain fringe\",\"八字刘海\",\"刘海\"]"
+      },
+      {
+        "taxonomy_id": "sty_wolf_cut",
+        "name_en": "Wolf Cut",
+        "name_zh": "狼尾头",
+        "category": "cut",
+        "aliases": "[\"wolf cut\",\"狼尾\"]"
+      },
+      {
+        "taxonomy_id": "sty_pixie",
+        "name_en": "Pixie Cut",
+        "name_zh": "精灵短发",
+        "category": "cut",
+        "aliases": "[\"pixie\",\"pixie cut\",\"精灵\"]"
+      },
+      {
+        "taxonomy_id": "sty_curly_shape",
+        "name_en": "Curly Shaping (dry cut)",
+        "name_zh": "卷发干剪塑形",
+        "category": "cut",
+        "aliases": "[\"curly cut\",\"dry cut\",\"curly shaping\",\"卷发干剪\"]"
+      },
+      {
+        "taxonomy_id": "sty_buzz_fade",
+        "name_en": "Skin Fade",
+        "name_zh": "渐层推剪",
+        "category": "cut",
+        "aliases": "[\"fade\",\"skin fade\",\"buzz cut\",\"推剪\"]"
+      },
+      {
+        "taxonomy_id": "sty_balayage",
+        "name_en": "Balayage",
+        "name_zh": "手绘挑染",
+        "category": "color",
+        "aliases": "[\"balayage\",\"挑染\"]"
+      },
+      {
+        "taxonomy_id": "sty_full_bleach_tone",
+        "name_en": "Full Bleach & Tone",
+        "name_zh": "全头漂染",
+        "category": "color",
+        "aliases": "[\"bleach\",\"bleach and tone\",\"漂染\"]"
+      },
+      {
+        "taxonomy_id": "sty_root_touchup",
+        "name_en": "Root Touch-up",
+        "name_zh": "补根染",
+        "category": "color",
+        "aliases": "[\"root touch up\",\"roots\",\"补根\"]"
+      },
+      {
+        "taxonomy_id": "sty_korean_perm",
+        "name_en": "Korean Digital Perm",
+        "name_zh": "韩式数码烫",
+        "category": "texture_service",
+        "aliases": "[\"korean perm\",\"digital perm\",\"数码烫\",\"烫\"]"
+      },
+      {
+        "taxonomy_id": "sty_keratin_smooth",
+        "name_en": "Keratin Smoothing",
+        "name_zh": "角蛋白顺滑",
+        "category": "texture_service",
+        "aliases": "[\"keratin\",\"keratin smoothing\",\"角蛋白\"]"
+      }
+    ]
+  },
+  "salon_schedule": {
+    "columns": [
+      {
+        "name": "stylist_id",
+        "type": "string"
+      },
+      {
+        "name": "weekday",
+        "type": "number"
+      },
+      {
+        "name": "start_time",
+        "type": "string"
+      },
+      {
+        "name": "end_time",
+        "type": "string"
+      },
+      {
+        "name": "valid_from",
+        "type": "string"
+      },
+      {
+        "name": "valid_to",
+        "type": "string"
+      }
+    ],
+    "rows": [
+      {
+        "stylist_id": "stl_amy",
+        "weekday": 2,
+        "start_time": "09:00",
+        "end_time": "18:00",
+        "valid_from": "2026-01-01",
+        "valid_to": "2026-12-31"
+      },
+      {
+        "stylist_id": "stl_amy",
+        "weekday": 3,
+        "start_time": "09:00",
+        "end_time": "18:00",
+        "valid_from": "2026-01-01",
+        "valid_to": "2026-12-31"
+      },
+      {
+        "stylist_id": "stl_amy",
+        "weekday": 4,
+        "start_time": "09:00",
+        "end_time": "18:00",
+        "valid_from": "2026-01-01",
+        "valid_to": "2026-12-31"
+      },
+      {
+        "stylist_id": "stl_amy",
+        "weekday": 5,
+        "start_time": "09:00",
+        "end_time": "18:00",
+        "valid_from": "2026-01-01",
+        "valid_to": "2026-12-31"
+      },
+      {
+        "stylist_id": "stl_amy",
+        "weekday": 6,
+        "start_time": "09:00",
+        "end_time": "18:00",
+        "valid_from": "2026-01-01",
+        "valid_to": "2026-12-31"
+      },
+      {
+        "stylist_id": "stl_marco",
+        "weekday": 3,
+        "start_time": "10:00",
+        "end_time": "19:00",
+        "valid_from": "2026-01-01",
+        "valid_to": "2026-12-31"
+      },
+      {
+        "stylist_id": "stl_marco",
+        "weekday": 4,
+        "start_time": "10:00",
+        "end_time": "19:00",
+        "valid_from": "2026-01-01",
+        "valid_to": "2026-12-31"
+      },
+      {
+        "stylist_id": "stl_marco",
+        "weekday": 5,
+        "start_time": "10:00",
+        "end_time": "19:00",
+        "valid_from": "2026-01-01",
+        "valid_to": "2026-12-31"
+      },
+      {
+        "stylist_id": "stl_marco",
+        "weekday": 6,
+        "start_time": "10:00",
+        "end_time": "19:00",
+        "valid_from": "2026-01-01",
+        "valid_to": "2026-12-31"
+      },
+      {
+        "stylist_id": "stl_marco",
+        "weekday": 0,
+        "start_time": "10:00",
+        "end_time": "19:00",
+        "valid_from": "2026-01-01",
+        "valid_to": "2026-12-31"
+      },
+      {
+        "stylist_id": "stl_priya",
+        "weekday": 2,
+        "start_time": "09:00",
+        "end_time": "17:00",
+        "valid_from": "2026-01-01",
+        "valid_to": "2026-12-31"
+      },
+      {
+        "stylist_id": "stl_priya",
+        "weekday": 3,
+        "start_time": "09:00",
+        "end_time": "17:00",
+        "valid_from": "2026-01-01",
+        "valid_to": "2026-12-31"
+      },
+      {
+        "stylist_id": "stl_priya",
+        "weekday": 4,
+        "start_time": "09:00",
+        "end_time": "17:00",
+        "valid_from": "2026-01-01",
+        "valid_to": "2026-12-31"
+      },
+      {
+        "stylist_id": "stl_priya",
+        "weekday": 5,
+        "start_time": "09:00",
+        "end_time": "17:00",
+        "valid_from": "2026-01-01",
+        "valid_to": "2026-12-31"
+      },
+      {
+        "stylist_id": "stl_priya",
+        "weekday": 6,
+        "start_time": "09:00",
+        "end_time": "17:00",
+        "valid_from": "2026-01-01",
+        "valid_to": "2026-12-31"
+      },
+      {
+        "stylist_id": "stl_jayden",
+        "weekday": 4,
+        "start_time": "10:00",
+        "end_time": "18:00",
+        "valid_from": "2026-01-01",
+        "valid_to": "2026-12-31"
+      },
+      {
+        "stylist_id": "stl_jayden",
+        "weekday": 5,
+        "start_time": "10:00",
+        "end_time": "18:00",
+        "valid_from": "2026-01-01",
+        "valid_to": "2026-12-31"
+      },
+      {
+        "stylist_id": "stl_jayden",
+        "weekday": 6,
+        "start_time": "10:00",
+        "end_time": "18:00",
+        "valid_from": "2026-01-01",
+        "valid_to": "2026-12-31"
+      },
+      {
+        "stylist_id": "stl_jayden",
+        "weekday": 0,
+        "start_time": "10:00",
+        "end_time": "18:00",
+        "valid_from": "2026-01-01",
+        "valid_to": "2026-12-31"
+      }
+    ]
+  },
+  "salon_appointments": {
+    "columns": [
+      {
+        "name": "appointment_id",
+        "type": "string"
+      },
+      {
+        "name": "stylist_id",
+        "type": "string"
+      },
+      {
+        "name": "service_id",
+        "type": "string"
+      },
+      {
+        "name": "start",
+        "type": "string"
+      },
+      {
+        "name": "end",
+        "type": "string"
+      },
+      {
+        "name": "status",
+        "type": "string"
+      }
+    ],
+    "rows": [
+      {
+        "appointment_id": "apt_5001",
+        "stylist_id": "stl_amy",
+        "service_id": "svc_color_root",
+        "start": "2026-09-18T14:00:00+10:00",
+        "end": "2026-09-18T15:30:00+10:00",
+        "status": "confirmed"
+      },
+      {
+        "appointment_id": "apt_5002",
+        "stylist_id": "stl_priya",
+        "service_id": "svc_cut_curly",
+        "start": "2026-09-16T11:00:00+10:00",
+        "end": "2026-09-16T12:30:00+10:00",
+        "status": "held"
+      },
+      {
+        "appointment_id": "apt_5003",
+        "stylist_id": "stl_amy",
+        "service_id": "svc_perm_korean",
+        "start": "2026-05-20T10:00:00+10:00",
+        "end": "2026-05-20T13:30:00+10:00",
+        "status": "completed"
+      },
+      {
+        "appointment_id": "apt_5004",
+        "stylist_id": "stl_marco",
+        "service_id": "svc_color_balayage",
+        "start": "2026-08-22T09:00:00+10:00",
+        "end": "2026-08-22T12:00:00+10:00",
+        "status": "cancelled"
+      },
+      {
+        "appointment_id": "apt_5005",
+        "stylist_id": "stl_priya",
+        "service_id": "svc_blowdry",
+        "start": "2026-07-30T16:00:00+10:00",
+        "end": "2026-07-30T16:45:00+10:00",
+        "status": "no_show"
+      },
+      {
+        "appointment_id": "apt_6001",
+        "stylist_id": "stl_amy",
+        "service_id": "svc_color_balayage",
+        "start": "2026-09-16T09:00:00+10:00",
+        "end": "2026-09-16T12:00:00+10:00",
+        "status": "confirmed"
+      },
+      {
+        "appointment_id": "apt_6002",
+        "stylist_id": "stl_amy",
+        "service_id": "svc_cut_women",
+        "start": "2026-09-16T13:00:00+10:00",
+        "end": "2026-09-16T14:00:00+10:00",
+        "status": "confirmed"
+      },
+      {
+        "appointment_id": "apt_6003",
+        "stylist_id": "stl_priya",
+        "service_id": "svc_treat_keratin",
+        "start": "2026-09-17T09:00:00+10:00",
+        "end": "2026-09-17T12:00:00+10:00",
+        "status": "confirmed"
+      },
+      {
+        "appointment_id": "apt_6004",
+        "stylist_id": "stl_marco",
+        "service_id": "svc_color_full_bleach",
+        "start": "2026-09-18T10:00:00+10:00",
+        "end": "2026-09-18T14:00:00+10:00",
+        "status": "confirmed"
+      },
+      {
+        "appointment_id": "apt_6005",
+        "stylist_id": "stl_jayden",
+        "service_id": "svc_cut_men",
+        "start": "2026-09-17T10:00:00+10:00",
+        "end": "2026-09-17T10:30:00+10:00",
+        "status": "held"
+      },
+      {
+        "appointment_id": "apt_6006",
+        "stylist_id": "stl_amy",
+        "service_id": "svc_blowdry",
+        "start": "2026-09-16T15:00:00+10:00",
+        "end": "2026-09-16T15:45:00+10:00",
+        "status": "cancelled"
+      }
+    ]
+  },
+  "salon_conversations": {
+    "columns": [
+      {
+        "name": "session_id",
+        "type": "string"
+      },
+      {
+        "name": "status",
+        "type": "string"
+      },
+      {
+        "name": "slots",
+        "type": "string"
+      },
+      {
+        "name": "recent_turns",
+        "type": "string"
+      },
+      {
+        "name": "last_question",
+        "type": "string"
+      },
+      {
+        "name": "turn_count",
+        "type": "number"
+      },
+      {
+        "name": "updated_at",
+        "type": "string"
+      }
+    ],
+    "rows": []
+  },
+  "salon_review_queue": {
+    "columns": [
+      {
+        "name": "session_id",
+        "type": "string"
+      },
+      {
+        "name": "request_text",
+        "type": "string"
+      },
+      {
+        "name": "draft_reply",
+        "type": "string"
+      },
+      {
+        "name": "reason",
+        "type": "string"
+      },
+      {
+        "name": "status",
+        "type": "string"
+      },
+      {
+        "name": "guardrail_pass",
+        "type": "boolean"
+      },
+      {
+        "name": "auto_sent",
+        "type": "boolean"
+      },
+      {
+        "name": "slots_snapshot",
+        "type": "string"
+      }
+    ],
+    "rows": []
+  }
+}

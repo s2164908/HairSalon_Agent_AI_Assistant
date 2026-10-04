@@ -1,0 +1,1 @@
+Read the verified customer hair profile. Returns not_configured in this draft (expected, not a fault). Never accept another customer identity from chat. Input JSON: {}.

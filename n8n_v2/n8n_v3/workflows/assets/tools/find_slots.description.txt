@@ -1,0 +1,1 @@
+Available appointment times from the authoritative booking adapter. Returns not_configured in this draft (expected, not a fault). Never compute availability yourself. Input JSON: {} or {"service_id":"svc_cut"}.

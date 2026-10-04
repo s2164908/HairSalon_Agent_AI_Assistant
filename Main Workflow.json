@@ -1,0 +1,454 @@
+{
+  "name": "Salon Appointment",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {
+          "allowFileUploads": false,
+          "responseMode": "lastNode"
+        }
+      },
+      "id": "cabf837d-d4d4-490e-853a-ab07a1a1d8e1",
+      "name": "Salon test chat",
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -864,
+        384
+      ],
+      "webhookId": "6447cd2b-7ad0-43bb-b768-1a8d6fdd13e1"
+    },
+    {
+      "parameters": {
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "You are a relevance filter for a salon booking assistant. Decide whether the customer's message is relevant to the salon: booking or changing appointments, salon services, opening hours, prices, or providing contact details (email/phone) for a booking. Set \"relevant\" to true for such messages, and false for anything off-topic (e.g. general chit-chat, unrelated questions, spam). When relevant is false, put a short polite message in \"reply\" asking the customer to send a salon-related request such as booking an appointment. When relevant is true, \"reply\" can be an empty string."
+        }
+      },
+      "id": "2c647c56-98f8-4815-a3ad-56429056119c",
+      "name": "Filter AI",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -640,
+        384
+      ]
+    },
+    {
+      "parameters": {
+        "model": "deepseek-flash",
+        "options": {}
+      },
+      "id": "1a4f5589-8d59-4b59-9508-8341d2071c8d",
+      "name": "Filter Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatDeepSeek",
+      "typeVersion": 1,
+      "position": [
+        -640,
+        608
+      ],
+      "credentials": {
+        "deepSeekApi": {
+          "id": "FNxtZECR4n8py6Ki",
+          "name": "DeepSeek account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"relevant\": {\n      \"type\": \"boolean\",\n      \"description\": \"true if the user message is relevant to a salon (bookings, appointments, services, hours, prices, or providing contact details for a booking); false otherwise\"\n    },\n    \"reply\": {\n      \"type\": \"string\",\n      \"description\": \"A short, polite message asking the user to provide a proper salon-related request. Only used when relevant is false.\"\n    }\n  },\n  \"required\": [\n    \"relevant\",\n    \"reply\"\n  ]\n}"
+      },
+      "id": "c56ddbba-60ce-4564-9215-0c6bed8f8593",
+      "name": "Relevance Parser",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        -512,
+        608
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "a1b2c3d4-e5f6-7890-abcd-ef0123456789",
+              "leftValue": "={{ $json.output.relevant }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "63dde489-41d5-4710-a2e5-b95d457bd5f7",
+      "name": "Is Relevant",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -288,
+        384
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b2c3d4e5-f6a7-8901-bcde-f01234567890",
+              "name": "output",
+              "value": "={{ $json.output.reply }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "2622241e-7f40-450c-b0c3-05d0735b578d",
+      "name": "Ask For Proper Input",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        0,
+        528
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "Fcs8S7XFhiCZhZIY",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/Fcs8S7XFhiCZhZIY",
+          "cachedResultName": "Appointment"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "chatInput": "={{ $('Salon test chat').item.json.chatInput }}",
+            "sessionId": "={{ $('Salon test chat').item.json.sessionId }}"
+          },
+          "matchingColumns": [
+            "chatInput",
+            "sessionId"
+          ],
+          "schema": [
+            {
+              "id": "chatInput",
+              "displayName": "chatInput",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "sessionId",
+              "displayName": "sessionId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        592,
+        128
+      ],
+      "name": "Call Appointment",
+      "id": "4097e521-78db-4d3c-a943-33bdaa74521c"
+    },
+    {
+      "parameters": {
+        "model": "deepseek-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatDeepSeek",
+      "typeVersion": 1,
+      "position": [
+        -64,
+        336
+      ],
+      "id": "0c221d9b-3252-4995-bbca-ca7996a5e5a3",
+      "name": "DeepSeek Chat Model",
+      "credentials": {
+        "deepSeekApi": {
+          "id": "njiT4X8e0ktDE3gJ",
+          "name": "DeepSeek account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -64,
+        128
+      ],
+      "id": "1e25c76e-30f0-4c32-8a72-ca2c142babf1",
+      "name": "Classifier"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "EhASlQjX6LHWQdQ9",
+          "mode": "list"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        608,
+        352
+      ],
+      "name": "Call Stylist",
+      "id": "7c152e8d-ada2-4df8-9a30-04209cdd2086"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "# relate to booking",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "db118dfc-4346-4699-b45b-bbd4c19b82eb"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "ad8a0a72-8883-4e0f-8396-2bcf1358f6f9",
+                    "leftValue": "# relate to style confirmation",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "4a3094ad-8150-427d-a449-c48710544e6d",
+                    "leftValue": "# relate to customized style design",
+                    "rightValue": "# unsure what style to choose",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        256,
+        128
+      ],
+      "id": "f9190566-096e-4f3a-9de9-c705893af156",
+      "name": "Switch"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Salon test chat": {
+      "main": [
+        [
+          {
+            "node": "Filter AI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter AI": {
+      "main": [
+        [
+          {
+            "node": "Is Relevant",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Filter AI",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Relevance Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Filter AI",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is Relevant": {
+      "main": [
+        [
+          {
+            "node": "Classifier",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Ask For Proper Input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "DeepSeek Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Classifier",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Classifier": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call Appointment": {
+      "main": [
+        []
+      ]
+    },
+    "Call Stylist": {
+      "main": [
+        []
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Call Appointment",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Call Stylist",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "73d3a823-91b0-4a2b-aa19-f6b55e0a757b",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "8909c94c84c0eed953bdb33bf06010d37fc361b4e5c42ea81d62b3d39a8eebff"
+  },
+  "nodeGroups": [],
+  "id": "K4S7FHNYTrwXTlqn",
+  "tags": []
+}

@@ -1,0 +1,197 @@
+{
+  "name": "Salon Assistant - Error Handler",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "4dd299eb-de54-5b1a-b04d-a3673a8ce574",
+      "name": "Error Trigger",
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        -420,
+        -300
+      ],
+      "notes": "Fires for any execution that fails anywhere, once this workflow is set as the instance/workflow error workflow.",
+      "notesInFlow": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// Global error handler  (PLAN.md Phase 9: \"错误工作流（Error Trigger）+ 每日人工抽检\")\n//\n// v2 had no error workflow at all: a throw in any Code node killed the chat turn,\n// and the draft vanished with the execution. This workflow records the failure in\n// the same staff-review table as a normal draft, so nothing is silently lost.\n//\n// It deliberately does NOT reference an error workflow of its own. A failure while\n// recording a failure must stop, not loop - that is what makes the retry budget\n// bounded.\n//\n// Emits exactly the six columns `Queue for staff review` / `Queue agent failure`\n// map: session_id, request_text, draft_reply, reason, status, guardrail_pass.\n\nconst payload = $input.first().json ?? {};\nconst execution = payload.execution ?? {};\nconst workflow = payload.workflow ?? {};\n// The Error Trigger is flat: { execution, workflow, trigger }. Be defensive about\n// older/newer shapes rather than throwing inside the error handler.\nconst failure = execution.error ?? payload.error ?? {};\n\nconst failedNode = execution.lastNodeExecuted ?? 'unknown node';\nconst workflowName = workflow.name ?? 'unknown workflow';\nconst message = String(\n  (failure && (failure.message || failure.description)) || payload.message || 'unknown error',\n).replace(/\\s+/g, ' ').trim().slice(0, 800);\n\nreturn [{ json: {\n  session_id: 'error_' + String(execution.id ?? workflow.id ?? 'unknown'),\n  request_text: 'ERROR in ' + workflowName + ' / ' + failedNode,\n  draft_reply: '[AGENT FAILURE] ' + failedNode + ': ' + message,\n  reason: 'agent_failed',\n  status: 'pending',\n  guardrail_pass: false\n} }];\n"
+      },
+      "id": "5a966b15-6d0b-5d6c-b2cd-c58b2080c173",
+      "name": "Build error context",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -200,
+        -300
+      ],
+      "notes": "Reduces the Error Trigger payload to the same six keys the main workflow's queue row uses, so a failure lands in salon_review_queue looking exactly like a draft - reason=agent_failed is the only difference.",
+      "notesInFlow": true
+    },
+    {
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "mode": "name",
+          "value": "salon_review_queue",
+          "cachedResultName": "salon_review_queue"
+        },
+        "resource": "row",
+        "operation": "insert",
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "session_id": "={{ $json.session_id }}",
+            "request_text": "={{ $json.request_text }}",
+            "draft_reply": "={{ $json.draft_reply }}",
+            "reason": "={{ $json.reason }}",
+            "status": "={{ $json.status }}",
+            "guardrail_pass": "={{ $json.guardrail_pass }}"
+          },
+          "schema": [
+            {
+              "id": "session_id",
+              "displayName": "session_id",
+              "type": "string",
+              "display": true,
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "request_text",
+              "displayName": "request_text",
+              "type": "string",
+              "display": true,
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "draft_reply",
+              "displayName": "draft_reply",
+              "type": "string",
+              "display": true,
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "reason",
+              "displayName": "reason",
+              "type": "string",
+              "display": true,
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "type": "string",
+              "display": true,
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "guardrail_pass",
+              "displayName": "guardrail_pass",
+              "type": "boolean",
+              "display": true,
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "c75386e2-fae5-5446-b66a-42462f2d5b4a",
+      "name": "Queue agent failure",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        20,
+        -300
+      ],
+      "onError": "continueRegularOutput",
+      "notes": "Same table, same columns as the happy path - no second place to look when triaging.",
+      "notesInFlow": false
+    },
+    {
+      "parameters": {},
+      "id": "c67021c5-d97e-5265-94c2-154c67fcbb2a",
+      "name": "Error recorded",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        240,
+        -300
+      ],
+      "notes": "Terminal node. Nothing here talks to a customer.",
+      "notesInFlow": false
+    },
+    {
+      "parameters": {
+        "content": "## Global error workflow\nv2 had **no** error workflow: a throw in any Code node killed the chat turn and the draft disappeared with the execution.\n\nAfter importing both files, point the main workflow's **Settings -> Error Workflow** at this one:\n```bash\npython3 scripts/wire_workflows.py --from-api      # or a hand-written ids file\n```\nThis workflow deliberately has no error workflow of its own, so a failure while recording a failure cannot loop.",
+        "height": 260,
+        "width": 1000,
+        "color": 2
+      },
+      "id": "735ff324-bae6-574f-9048-c53e3df2f4e0",
+      "name": "Note 1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -460,
+        -620
+      ]
+    }
+  ],
+  "connections": {
+    "Error Trigger": {
+      "main": [
+        [
+          {
+            "node": "Build error context",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build error context": {
+      "main": [
+        [
+          {
+            "node": "Queue agent failure",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Queue agent failure": {
+      "main": [
+        [
+          {
+            "node": "Error recorded",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": true
+  },
+  "active": false,
+  "pinData": {},
+  "tags": [],
+  "nodeGroups": []
+}

@@ -1,0 +1,13 @@
+# Local deployment secrets
+.env
+.env.*
+!.env.example
+
+# This local archive includes deployment secrets; sources are committed separately.
+/n8n_v3.zip
+
+# macOS and Python generated files
+.DS_Store
+__MACOSX/
+__pycache__/
+*.py[cod]

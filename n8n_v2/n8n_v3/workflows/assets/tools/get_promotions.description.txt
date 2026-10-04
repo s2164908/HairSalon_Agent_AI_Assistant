@@ -1,0 +1,1 @@
+Currently valid, verifiable promotions. An empty list means there is no verified offer; never invent a discount. Both fields OPTIONAL. If the customer names a service, pass their words as service_query and the tool resolves the ID itself; never guess a service_id. Input JSON: {} or {"service_query":"men's cut"} or {"service_id":"<exact id a tool returned this turn>"}.

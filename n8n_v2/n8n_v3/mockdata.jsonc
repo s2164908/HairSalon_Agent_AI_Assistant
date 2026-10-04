@@ -1,0 +1,1231 @@
+// =============================================================================
+//  mockdata.jsonc — 美发店智能客服 Agent 的模拟数据 + 工具 I/O 样例
+//  配套 PLAN.md。所有数据均为虚构，用于 Phase 0 建表与 Phase 1-5 开发测试。
+//
+//  约定：
+//    - 币种 AUD，时区 Australia/Sydney（2026-09 为 AEST = UTC+10:00）
+//    - 工具统一返回信封：{ "ok": true, "data": {...} }
+//                    或 { "ok": false, "error": { code, message, retryable } }
+//    - 空结果是成功不是失败 —— 必须显式返回空，让 agent 无从编造
+//
+//  注意：JSONC（带注释）。需要严格 JSON 时见文件末尾的剥离命令。
+// =============================================================================
+{
+  "_meta": {
+    "generated_for": "PLAN.md — haircut business customer-service agent",
+    "generated_at": "2026-09-12T09:00:00+10:00",
+    "currency": "AUD",
+    "timezone": "Australia/Sydney",
+    "disclaimer": "全部为虚构测试数据，不含任何真实客户信息"
+  },
+
+  // ===========================================================================
+  //  第一部分：数据表（PLAN.md §2 的 7 张表）
+  // ===========================================================================
+  "data": {
+
+    // -------------------------------------------------------------------------
+    //  1. style_taxonomy — 受控词表
+    //     classify_style 只能输出这里的 id，防止模型自由发挥。
+    //     生产环境建议 20-30 条起步；这里是节选。
+    // -------------------------------------------------------------------------
+    "style_taxonomy": [
+      {
+        "id": "sty_blunt_bob",
+        "name_en": "Blunt Bob",
+        "name_zh": "齐颈波波头",
+        "category": "cut",
+        "suits_texture": ["straight", "wavy"],
+        "est_duration_min": 60,
+        "maintenance": "medium",
+        "notes": "细软发显厚度好；卷发需搭配拉直维护"
+      },
+      {
+        "id": "sty_layered_lob",
+        "name_en": "Layered Lob",
+        "name_zh": "齐肩层次发",
+        "category": "cut",
+        "suits_texture": ["straight", "wavy", "curly"],
+        "est_duration_min": 60,
+        "maintenance": "low"
+      },
+      {
+        "id": "sty_curtain_bangs",
+        "name_en": "Curtain Bangs",
+        "name_zh": "八字刘海",
+        "category": "cut",
+        "suits_texture": ["straight", "wavy"],
+        "est_duration_min": 20,
+        "maintenance": "high",
+        "notes": "需每 4-6 周修剪"
+      },
+      {
+        "id": "sty_wolf_cut",
+        "name_en": "Wolf Cut",
+        "name_zh": "狼尾头",
+        "category": "cut",
+        "suits_texture": ["wavy", "curly"],
+        "est_duration_min": 75,
+        "maintenance": "medium"
+      },
+      {
+        "id": "sty_pixie",
+        "name_en": "Pixie Cut",
+        "name_zh": "精灵短发",
+        "category": "cut",
+        "suits_texture": ["straight", "wavy", "curly", "coily"],
+        "est_duration_min": 45,
+        "maintenance": "high"
+      },
+      {
+        "id": "sty_curly_shape",
+        "name_en": "Curly Shaping (dry cut)",
+        "name_zh": "卷发干剪塑形",
+        "category": "cut",
+        "suits_texture": ["curly", "coily"],
+        "est_duration_min": 90,
+        "maintenance": "low",
+        "notes": "干发状态逐卷修剪，需专门受训的发型师"
+      },
+      {
+        "id": "sty_buzz_fade",
+        "name_en": "Skin Fade",
+        "name_zh": "渐层推剪",
+        "category": "cut",
+        "suits_texture": ["straight", "wavy", "curly", "coily"],
+        "est_duration_min": 30,
+        "maintenance": "high"
+      },
+      {
+        "id": "sty_balayage",
+        "name_en": "Balayage",
+        "name_zh": "手绘挑染",
+        "category": "color",
+        "suits_texture": ["straight", "wavy", "curly"],
+        "est_duration_min": 180,
+        "maintenance": "low",
+        "notes": "需先做发质评估；漂过或烫过的头发要单独确认"
+      },
+      {
+        "id": "sty_full_bleach_tone",
+        "name_en": "Full Bleach & Tone",
+        "name_zh": "全头漂染",
+        "category": "color",
+        "suits_texture": ["straight", "wavy", "curly"],
+        "est_duration_min": 240,
+        "maintenance": "high",
+        "notes": "高损伤项目，必须面诊"
+      },
+      {
+        "id": "sty_root_touchup",
+        "name_en": "Root Touch-up",
+        "name_zh": "补根染",
+        "category": "color",
+        "suits_texture": ["straight", "wavy", "curly", "coily"],
+        "est_duration_min": 90,
+        "maintenance": "medium"
+      },
+      {
+        "id": "sty_korean_perm",
+        "name_en": "Korean Digital Perm",
+        "name_zh": "韩式数码烫",
+        "category": "texture_service",
+        "suits_texture": ["straight", "wavy"],
+        "est_duration_min": 210,
+        "maintenance": "medium",
+        "notes": "近期漂染过的头发不建议"
+      },
+      {
+        "id": "sty_keratin_smooth",
+        "name_en": "Keratin Smoothing",
+        "name_zh": "角蛋白顺滑",
+        "category": "texture_service",
+        "suits_texture": ["wavy", "curly", "coily"],
+        "est_duration_min": 180,
+        "maintenance": "low"
+      }
+    ],
+
+    // -------------------------------------------------------------------------
+    //  2. services — 服务目录
+    //     price_aud 是价格的【唯一权威来源】。Agent 报价只能来自这里。
+    // -------------------------------------------------------------------------
+    "services": [
+      {
+        "id": "svc_cut_women",
+        "name_en": "Women's Cut & Style",
+        "name_zh": "女士剪发造型",
+        "duration_min": 60,
+        "price_aud": 85,
+        "requires_consult": false,
+        "allowed_stylist_levels": ["junior", "senior", "director"],
+        "related_styles": ["sty_blunt_bob", "sty_layered_lob", "sty_wolf_cut", "sty_pixie"]
+      },
+      {
+        "id": "svc_cut_men",
+        "name_en": "Men's Cut",
+        "name_zh": "男士剪发",
+        "duration_min": 30,
+        "price_aud": 45,
+        "requires_consult": false,
+        "allowed_stylist_levels": ["junior", "senior", "director"],
+        "related_styles": ["sty_buzz_fade"]
+      },
+      {
+        "id": "svc_cut_curly",
+        "name_en": "Curly Cut (dry)",
+        "name_zh": "卷发干剪",
+        "duration_min": 90,
+        "price_aud": 130,
+        "requires_consult": false,
+        "allowed_stylist_levels": ["senior", "director"],
+        "related_styles": ["sty_curly_shape"],
+        "notes": "仅限受过卷发干剪训练的发型师"
+      },
+      {
+        "id": "svc_cut_fringe",
+        "name_en": "Fringe Trim",
+        "name_zh": "刘海修剪",
+        "duration_min": 15,
+        "price_aud": 20,
+        "requires_consult": false,
+        "allowed_stylist_levels": ["junior", "senior", "director"],
+        "related_styles": ["sty_curtain_bangs"]
+      },
+      {
+        "id": "svc_color_root",
+        "name_en": "Root Touch-up",
+        "name_zh": "补根染",
+        "duration_min": 90,
+        "price_aud": 130,
+        "requires_consult": false,
+        "allowed_stylist_levels": ["senior", "director"],
+        "related_styles": ["sty_root_touchup"]
+      },
+      {
+        "id": "svc_color_balayage",
+        "name_en": "Balayage",
+        "name_zh": "手绘挑染",
+        "duration_min": 180,
+        "price_aud": 320,
+        "requires_consult": true,
+        "allowed_stylist_levels": ["senior", "director"],
+        "related_styles": ["sty_balayage"]
+      },
+      {
+        "id": "svc_color_full_bleach",
+        "name_en": "Full Bleach & Tone",
+        "name_zh": "全头漂染",
+        "duration_min": 240,
+        "price_aud": 420,
+        "requires_consult": true,
+        "allowed_stylist_levels": ["director"],
+        "related_styles": ["sty_full_bleach_tone"]
+      },
+      {
+        "id": "svc_perm_korean",
+        "name_en": "Korean Digital Perm",
+        "name_zh": "韩式数码烫",
+        "duration_min": 210,
+        "price_aud": 350,
+        "requires_consult": true,
+        "allowed_stylist_levels": ["senior", "director"],
+        "related_styles": ["sty_korean_perm"]
+      },
+      {
+        "id": "svc_treat_keratin",
+        "name_en": "Keratin Smoothing",
+        "name_zh": "角蛋白顺滑",
+        "duration_min": 180,
+        "price_aud": 290,
+        "requires_consult": true,
+        "allowed_stylist_levels": ["senior", "director"],
+        "related_styles": ["sty_keratin_smooth"]
+      },
+      {
+        "id": "svc_treat_olaplex",
+        "name_en": "Olaplex Bond Treatment",
+        "name_zh": "Olaplex 结构修复",
+        "duration_min": 45,
+        "price_aud": 75,
+        "requires_consult": false,
+        "allowed_stylist_levels": ["junior", "senior", "director"],
+        "related_styles": []
+      },
+      {
+        "id": "svc_blowdry",
+        "name_en": "Blow Dry & Style",
+        "name_zh": "吹造型",
+        "duration_min": 45,
+        "price_aud": 55,
+        "requires_consult": false,
+        "allowed_stylist_levels": ["junior", "senior", "director"],
+        "related_styles": []
+      }
+    ],
+
+    // -------------------------------------------------------------------------
+    //  3. stylists — 发型师
+    //     specialties 关联 style_taxonomy.id；match_stylist 靠它做确定性打分。
+    //     texture_experience 单列，因为"会剪卷发"和"擅长某个发型"是两回事。
+    // -------------------------------------------------------------------------
+    "stylists": [
+      {
+        "id": "stl_amy",
+        "name": "Amy Chen",
+        "level": "senior",
+        "price_tier": "senior",
+        "specialties": ["sty_korean_perm", "sty_layered_lob", "sty_curtain_bangs", "sty_balayage"],
+        "texture_experience": ["straight", "wavy"],
+        "languages": ["en", "zh-Hans", "zh-Hant"],
+        "years_experience": 8,
+        "active": true
+      },
+      {
+        "id": "stl_marco",
+        "name": "Marco Ferrari",
+        "level": "director",
+        "price_tier": "director",
+        "specialties": ["sty_full_bleach_tone", "sty_balayage", "sty_pixie", "sty_wolf_cut"],
+        "texture_experience": ["straight", "wavy", "curly"],
+        "languages": ["en", "it"],
+        "years_experience": 15,
+        "active": true
+      },
+      {
+        "id": "stl_priya",
+        "name": "Priya Raman",
+        "level": "senior",
+        "price_tier": "senior",
+        "specialties": ["sty_curly_shape", "sty_keratin_smooth", "sty_layered_lob"],
+        "texture_experience": ["curly", "coily", "wavy"],
+        "languages": ["en", "ta", "hi"],
+        "years_experience": 10,
+        "certifications": ["DevaCurl Advanced", "Keratin Complex"],
+        "active": true
+      },
+      {
+        "id": "stl_jayden",
+        "name": "Jayden Wu",
+        "level": "junior",
+        "price_tier": "junior",
+        "specialties": ["sty_buzz_fade", "sty_curtain_bangs"],
+        "texture_experience": ["straight", "wavy"],
+        "languages": ["en", "zh-Hans"],
+        "years_experience": 2,
+        "active": true
+      },
+      {
+        "id": "stl_sofia",
+        "name": "Sofia Alvarez",
+        "level": "senior",
+        "price_tier": "senior",
+        "specialties": ["sty_balayage", "sty_layered_lob", "sty_root_touchup"],
+        "texture_experience": ["straight", "wavy"],
+        "languages": ["en", "es"],
+        "years_experience": 7,
+        "active": false,
+        "inactive_reason": "产假至 2026-11-30 —— 不应出现在任何推荐结果里"
+      }
+    ],
+
+    // -------------------------------------------------------------------------
+    //  4. customers — 客户
+    //     consent_flags 是隐私合规的落点（PLAN.md §8 决策 5）。
+    // -------------------------------------------------------------------------
+    "customers": [
+      {
+        "id": "cus_1001",
+        "name": "Lin Wei",
+        "channel": "instagram",
+        "channel_handle": "@linwei.syd",
+        "phone": "+61400000101",
+        "language": "zh-Hans",
+        "hair_profile_id": "hp_1001",
+        "consent_flags": {
+          "data_retention": true,
+          "photo_upload": false,
+          "marketing_messages": true,
+          "consented_at": "2026-03-04T14:22:00+11:00"
+        },
+        "created_at": "2026-03-04T14:22:00+11:00",
+        "completed_appointments": 4
+      },
+      {
+        "id": "cus_1002",
+        "name": "Sarah Nguyen",
+        "channel": "whatsapp",
+        "channel_handle": "+61400000202",
+        "phone": "+61400000202",
+        "language": "en",
+        "hair_profile_id": "hp_1002",
+        "consent_flags": {
+          "data_retention": true,
+          "photo_upload": true,
+          "marketing_messages": false,
+          "consented_at": "2026-06-18T10:05:00+10:00"
+        },
+        "created_at": "2026-06-18T10:05:00+10:00",
+        "completed_appointments": 2
+      },
+      {
+        "id": "cus_1003",
+        "name": "Tom Becker",
+        "channel": "web",
+        "channel_handle": "web_session_8f3a",
+        "phone": null,
+        "language": "en",
+        "hair_profile_id": null,
+        "consent_flags": {
+          "data_retention": false,
+          "photo_upload": false,
+          "marketing_messages": false,
+          "consented_at": null
+        },
+        "created_at": "2026-09-12T08:40:00+10:00",
+        "completed_appointments": 0,
+        "notes": "新客户，无发质档案 —— 用于测试 hair_profile_read 的 not-found 路径与首次到店促销"
+      }
+    ],
+
+    // -------------------------------------------------------------------------
+    //  5. hair_profiles — 发质档案
+    //     【关键】每个字段都带 source，区分自报 / 发型师记录 / 模型推断。
+    //     PLAN.md §0 的硬约束：推断值必须经客户确认才能升级为 self_reported。
+    // -------------------------------------------------------------------------
+    "hair_profiles": [
+      {
+        "id": "hp_1001",
+        "customer_id": "cus_1001",
+        "texture": { "value": "straight", "source": "self_reported", "confirmed_at": "2026-03-04T14:30:00+11:00" },
+        "density": { "value": "medium", "source": "self_reported", "confirmed_at": "2026-03-04T14:30:00+11:00" },
+        "porosity": { "value": "low", "source": "stylist_recorded", "recorded_by": "stl_amy", "confirmed_at": "2026-05-20T11:00:00+10:00" },
+        "scalp_sensitivity": { "value": "none_reported", "source": "self_reported", "confirmed_at": "2026-03-04T14:30:00+11:00" },
+        "chemical_history": [
+          { "type": "perm", "service_id": "svc_perm_korean", "date": "2026-05-20", "source": "salon_record" },
+          { "type": "color", "service_id": "svc_color_root", "date": "2026-08-02", "source": "salon_record" }
+        ],
+        "updated_at": "2026-08-02T13:00:00+10:00"
+      },
+      {
+        "id": "hp_1002",
+        "customer_id": "cus_1002",
+        "texture": { "value": "curly", "source": "self_reported", "confirmed_at": "2026-06-18T10:12:00+10:00" },
+        "density": { "value": "thick", "source": "self_reported", "confirmed_at": "2026-06-18T10:12:00+10:00" },
+        "porosity": { "value": "high", "source": "inferred", "confirmed_at": null, "note": "模型据对话推断，【未经客户确认】—— 不得作为推荐依据" },
+        "scalp_sensitivity": { "value": "sensitive_to_bleach", "source": "self_reported", "confirmed_at": "2026-06-18T10:12:00+10:00" },
+        "chemical_history": [],
+        "updated_at": "2026-07-30T16:45:00+10:00"
+      }
+    ],
+
+    // -------------------------------------------------------------------------
+    //  6. appointments — 预约
+    //     status: held / confirmed / completed / cancelled / no_show
+    //     idempotency_key 防重复下单（PLAN.md §5）。
+    // -------------------------------------------------------------------------
+    "appointments": [
+      {
+        "id": "apt_5001",
+        "customer_id": "cus_1001",
+        "stylist_id": "stl_amy",
+        "service_id": "svc_color_root",
+        "start": "2026-09-18T14:00:00+10:00",
+        "end": "2026-09-18T15:30:00+10:00",
+        "status": "confirmed",
+        "price_aud": 130,
+        "applied_promotion_id": null,
+        "idempotency_key": "idem_a1b2c3",
+        "created_at": "2026-09-05T19:12:00+10:00"
+      },
+      {
+        "id": "apt_5002",
+        "customer_id": "cus_1002",
+        "stylist_id": "stl_priya",
+        "service_id": "svc_cut_curly",
+        "start": "2026-09-16T11:00:00+10:00",
+        "end": "2026-09-16T12:30:00+10:00",
+        "status": "held",
+        "hold_expires_at": "2026-09-12T09:10:00+10:00",
+        "price_aud": 130,
+        "idempotency_key": "idem_d4e5f6",
+        "created_at": "2026-09-12T09:00:00+10:00",
+        "notes": "TTL 已过期 —— 用于测试 confirm_booking 的 HOLD_EXPIRED 路径"
+      },
+      {
+        "id": "apt_5003",
+        "customer_id": "cus_1001",
+        "stylist_id": "stl_amy",
+        "service_id": "svc_perm_korean",
+        "start": "2026-05-20T10:00:00+10:00",
+        "end": "2026-05-20T13:30:00+10:00",
+        "status": "completed",
+        "price_aud": 350,
+        "idempotency_key": "idem_g7h8i9",
+        "created_at": "2026-05-10T20:30:00+10:00"
+      },
+      {
+        "id": "apt_5004",
+        "customer_id": "cus_1002",
+        "stylist_id": "stl_marco",
+        "service_id": "svc_color_balayage",
+        "start": "2026-08-22T09:00:00+10:00",
+        "end": "2026-08-22T12:00:00+10:00",
+        "status": "cancelled",
+        "cancelled_at": "2026-08-20T18:00:00+10:00",
+        "cancellation_fee_aud": 0,
+        "cancellation_reason": "customer_request",
+        "price_aud": 320,
+        "idempotency_key": "idem_j1k2l3"
+      },
+      {
+        "id": "apt_5005",
+        "customer_id": "cus_1002",
+        "stylist_id": "stl_priya",
+        "service_id": "svc_blowdry",
+        "start": "2026-07-30T16:00:00+10:00",
+        "end": "2026-07-30T16:45:00+10:00",
+        "status": "no_show",
+        "price_aud": 55,
+        "idempotency_key": "idem_m4n5o6"
+      }
+    ],
+
+    // -------------------------------------------------------------------------
+    //  7. promotions — 促销
+    //     【唯一权威来源】。Agent 只能推这里的、且在有效期内、且客户符合资格的。
+    //     eligibility 是结构化规则，由工具确定性求值，不交给 LLM 判断。
+    // -------------------------------------------------------------------------
+    "promotions": [
+      {
+        "id": "promo_first_visit",
+        "title_en": "First Visit — 20% off any cut",
+        "title_zh": "首次到店 —— 剪发 8 折",
+        "discount": { "type": "percent", "value": 20 },
+        "eligibility": {
+          "completed_appointments_max": 0,
+          "service_ids": ["svc_cut_women", "svc_cut_men", "svc_cut_curly"]
+        },
+        "valid_from": "2026-01-01",
+        "valid_to": "2026-12-31",
+        "stackable": false,
+        "channels": ["web", "instagram", "whatsapp"]
+      },
+      {
+        "id": "promo_midweek",
+        "title_en": "Midweek Special — 15% off before 3pm",
+        "title_zh": "周中优惠 —— 下午三点前 85 折",
+        "discount": { "type": "percent", "value": 15 },
+        "eligibility": {
+          "days_of_week": ["TUE", "WED", "THU"],
+          "start_time_before": "15:00",
+          "service_ids": "any"
+        },
+        "valid_from": "2026-07-01",
+        "valid_to": "2026-10-31",
+        "stackable": false,
+        "channels": ["web", "instagram", "whatsapp"]
+      },
+      {
+        "id": "promo_olaplex_bundle",
+        "title_en": "Olaplex add-on with any colour service — $45 (save $30)",
+        "title_zh": "染发加购 Olaplex —— $45（省 $30）",
+        "discount": { "type": "fixed_price", "value": 45, "applies_to_service_id": "svc_treat_olaplex" },
+        "eligibility": {
+          "requires_service_in_same_booking": ["svc_color_root", "svc_color_balayage", "svc_color_full_bleach"]
+        },
+        "valid_from": "2026-08-01",
+        "valid_to": "2026-11-30",
+        "stackable": true,
+        "channels": ["web", "instagram", "whatsapp"]
+      },
+      {
+        "id": "promo_eofy_expired",
+        "title_en": "EOFY Colour Sale — 25% off",
+        "title_zh": "财年末染发特惠 —— 75 折",
+        "discount": { "type": "percent", "value": 25 },
+        "eligibility": { "service_ids": ["svc_color_balayage", "svc_color_full_bleach"] },
+        "valid_from": "2026-05-15",
+        "valid_to": "2026-06-30",
+        "stackable": false,
+        "channels": ["web", "instagram"],
+        "notes": "【已过期】刻意保留 —— 测试 agent 会不会推已失效的促销"
+      }
+    ]
+  },
+
+  // ===========================================================================
+  //  第二部分：工具 I/O 样例（PLAN.md §3 的 11 个工具）
+  //  每个工具给 1 个成功样例 + 1-2 个边界/失败样例。
+  //  失败样例同时就是 Phase 5 的 adversarial 测试用例。
+  // ===========================================================================
+  "tool_io": {
+
+    // ========================= 只读工具（低风险） =========================
+
+    // -------------------------------------------------------------------------
+    //  T1. service_catalog — 查服务、时长、价格
+    //  何时用：客户问项目、价格、要做多久。
+    //  不要用在：查优惠（用 get_promotions）。
+    // -------------------------------------------------------------------------
+    "service_catalog": {
+      "success": {
+        "input": { "query": "balayage" },
+        "output": {
+          "ok": true,
+          "data": {
+            "services": [
+              {
+                "id": "svc_color_balayage",
+                "name_en": "Balayage",
+                "name_zh": "手绘挑染",
+                "duration_min": 180,
+                "price_aud": 320,
+                "requires_consult": true,
+                "allowed_stylist_levels": ["senior", "director"]
+              }
+            ],
+            "price_note": "价格为起步价，实际以面诊后确认为准"
+          }
+        }
+      },
+      "not_found": {
+        "input": { "query": "接发" },
+        "output": {
+          "ok": true,
+          "data": {
+            "services": [],
+            "message": "本店目前不提供接发服务。"
+          },
+          "_agent_hint": "空数组 = 确实没有。必须如实告知，不得推荐替代品当作本店有此服务。"
+        }
+      }
+    },
+
+    // -------------------------------------------------------------------------
+    //  T2. get_promotions — 按资格规则检索在售促销
+    //  何时用：客户问优惠、折扣、套餐；或报价前主动检查。
+    //  不要用在：查原价（用 service_catalog）。
+    //  【硬约束】返回空就是没有促销，不得自行编造。
+    // -------------------------------------------------------------------------
+    "get_promotions": {
+      "success_eligible": {
+        "input": {
+          "customer_id": "cus_1003",
+          "service_ids": ["svc_cut_men"],
+          "at": "2026-09-16T10:00:00+10:00",
+          "channel": "web"
+        },
+        "output": {
+          "ok": true,
+          "data": {
+            "eligible": [
+              {
+                "id": "promo_first_visit",
+                "title_en": "First Visit — 20% off any cut",
+                "title_zh": "首次到店 —— 剪发 8 折",
+                "discount": { "type": "percent", "value": 20 },
+                "matched_because": ["completed_appointments = 0", "svc_cut_men 在适用服务内"],
+                "price_before_aud": 45,
+                "price_after_aud": 36,
+                "stackable": false
+              },
+              {
+                "id": "promo_midweek",
+                "title_zh": "周中优惠 —— 下午三点前 85 折",
+                "discount": { "type": "percent", "value": 15 },
+                "matched_because": ["2026-09-16 是星期三", "10:00 早于 15:00"],
+                "price_before_aud": 45,
+                "price_after_aud": 38.25,
+                "stackable": false
+              }
+            ],
+            "best_single": "promo_first_visit",
+            "excluded": [
+              { "id": "promo_olaplex_bundle", "reason": "本次预约不含染发服务" },
+              { "id": "promo_eofy_expired", "reason": "已于 2026-06-30 过期" }
+            ],
+            "note": "promo_first_visit 与 promo_midweek 均不可叠加，只能二选一"
+          }
+        }
+      },
+      "success_empty": {
+        "input": {
+          "customer_id": "cus_1001",
+          "service_ids": ["svc_perm_korean"],
+          "at": "2026-09-19T16:00:00+10:00",
+          "channel": "instagram"
+        },
+        "output": {
+          "ok": true,
+          "data": {
+            "eligible": [],
+            "excluded": [
+              { "id": "promo_first_visit", "reason": "客户已完成 4 次预约，非首次到店" },
+              { "id": "promo_midweek", "reason": "2026-09-19 是星期六，且 16:00 晚于 15:00" },
+              { "id": "promo_olaplex_bundle", "reason": "本次预约不含染发服务" },
+              { "id": "promo_eofy_expired", "reason": "已于 2026-06-30 过期" }
+            ],
+            "message": "当前没有适用于该客户与该服务的促销。"
+          },
+          "_agent_hint": "【必须原样转达「目前没有优惠」】。这是幻觉率指标的主要考点。"
+        }
+      }
+    },
+
+    // -------------------------------------------------------------------------
+    //  T3. find_slots — 查可用时段
+    //  何时用：客户想约时间，或需要展示可选档期。
+    //  不要用在：占位（用 hold_slot）—— 本工具只读，不锁定任何时段。
+    // -------------------------------------------------------------------------
+    "find_slots": {
+      "success": {
+        "input": {
+          "service_id": "svc_cut_curly",
+          "stylist_id": "stl_priya",
+          "date_from": "2026-09-16",
+          "date_to": "2026-09-18",
+          "limit": 5
+        },
+        "output": {
+          "ok": true,
+          "data": {
+            "slots": [
+              { "stylist_id": "stl_priya", "stylist_name": "Priya Raman", "start": "2026-09-16T13:00:00+10:00", "end": "2026-09-16T14:30:00+10:00", "price_aud": 130 },
+              { "stylist_id": "stl_priya", "stylist_name": "Priya Raman", "start": "2026-09-17T09:30:00+10:00", "end": "2026-09-17T11:00:00+10:00", "price_aud": 130 },
+              { "stylist_id": "stl_priya", "stylist_name": "Priya Raman", "start": "2026-09-18T15:00:00+10:00", "end": "2026-09-18T16:30:00+10:00", "price_aud": 130 }
+            ],
+            "queried_range": { "from": "2026-09-16", "to": "2026-09-18" },
+            "note": "时段为查询瞬间快照，未锁定。确认前须调 hold_slot。"
+          }
+        }
+      },
+      "success_empty": {
+        "input": { "service_id": "svc_color_full_bleach", "date_from": "2026-09-14", "date_to": "2026-09-15" },
+        "output": {
+          "ok": true,
+          "data": {
+            "slots": [],
+            "message": "所选日期内无可用时段。",
+            "reason_detail": "全头漂染需 240 分钟且仅限 director 级别；stl_marco 在该区间已排满。",
+            "next_available_hint": "2026-09-21T09:00:00+10:00"
+          }
+        }
+      },
+      "backend_error": {
+        "input": { "service_id": "svc_cut_women", "date_from": "2026-09-16", "date_to": "2026-09-16" },
+        "output": {
+          "ok": false,
+          "error": {
+            "code": "BOOKING_BACKEND_TIMEOUT",
+            "message": "预约系统响应超时",
+            "retryable": true,
+            "retry_after_ms": 2000
+          },
+          "_agent_hint": "重试 2 次仍失败 → 走 escalate_to_human，不得凭空报出时段。"
+        }
+      }
+    },
+
+    // -------------------------------------------------------------------------
+    //  T4. match_stylist — 发型师匹配（确定性打分）
+    //  何时用：客户没指定发型师，或问"谁比较适合我"。
+    //  【核心】排序由下面的权重算出，LLM 只负责把 reasons 说成人话，不得改排序。
+    // -------------------------------------------------------------------------
+    "match_stylist": {
+      "_scoring_weights": {
+        "specialty_match": 40,
+        "texture_experience": 25,
+        "language_match": 15,
+        "price_tier_fit": 10,
+        "availability_in_window": 10,
+        "_note": "总分 100。权重写死在 Custom Code Tool 里，同样输入永远同样排序。"
+      },
+      "success": {
+        "input": {
+          "style_id": "sty_curly_shape",
+          "customer_id": "cus_1002",
+          "hair_texture": "curly",
+          "language": "en",
+          "price_tier_preference": "any",
+          "date_from": "2026-09-16",
+          "date_to": "2026-09-20"
+        },
+        "output": {
+          "ok": true,
+          "data": {
+            "candidates": [
+              {
+                "rank": 1,
+                "stylist_id": "stl_priya",
+                "stylist_name": "Priya Raman",
+                "score": 100,
+                "breakdown": { "specialty_match": 40, "texture_experience": 25, "language_match": 15, "price_tier_fit": 10, "availability_in_window": 10 },
+                "reasons": [
+                  "专长包含卷发干剪塑形",
+                  "有 curly / coily 发质经验，并持有 DevaCurl Advanced 认证",
+                  "可用英语沟通",
+                  "所选日期区间内有 3 个可用时段"
+                ]
+              },
+              {
+                "rank": 2,
+                "stylist_id": "stl_marco",
+                "stylist_name": "Marco Ferrari",
+                "score": 60,
+                "breakdown": { "specialty_match": 0, "texture_experience": 25, "language_match": 15, "price_tier_fit": 10, "availability_in_window": 10 },
+                "reasons": [
+                  "有 curly 发质经验，但专长不含卷发干剪",
+                  "可用英语沟通",
+                  "所选日期区间内有可用时段"
+                ]
+              }
+            ],
+            "excluded": [
+              { "stylist_id": "stl_sofia", "reason": "休假中（产假至 2026-11-30）" },
+              { "stylist_id": "stl_amy", "reason": "无 curly 发质经验" },
+              { "stylist_id": "stl_jayden", "reason": "junior 级别不可执行 svc_cut_curly" }
+            ],
+            "returned": 2,
+            "note": "符合条件者不足 3 人，已返回全部合格候选。"
+          }
+        }
+      },
+      "no_match_relaxed": {
+        "input": {
+          "style_id": "sty_korean_perm",
+          "hair_texture": "coily",
+          "language": "zh-Hans",
+          "date_from": "2026-09-16",
+          "date_to": "2026-09-17"
+        },
+        "output": {
+          "ok": true,
+          "data": {
+            "candidates": [
+              {
+                "rank": 1,
+                "stylist_id": "stl_amy",
+                "stylist_name": "Amy Chen",
+                "score": 65,
+                "breakdown": { "specialty_match": 40, "texture_experience": 0, "language_match": 15, "price_tier_fit": 10, "availability_in_window": 0 },
+                "reasons": ["专长包含韩式数码烫", "可用中文沟通"],
+                "caveats": ["无 coily 发质经验", "所选两天内无档期"]
+              }
+            ],
+            "relaxed_constraints": ["texture_experience", "availability_in_window"],
+            "recommendation": "coily 发质做数码烫风险较高，建议先预约面诊而非直接下单。",
+            "_agent_hint": "放宽了条件必须如实告诉客户放宽了什么，不能假装完美匹配。"
+          }
+        }
+      }
+    },
+
+    // -------------------------------------------------------------------------
+    //  T5. classify_style — 发型分类
+    //  何时用：客户描述想要的发型，或上传参考图。
+    //  【硬约束】输出只能是 style_taxonomy 里的 id；置信度低就反问，不猜。
+    // -------------------------------------------------------------------------
+    "classify_style": {
+      "success_text": {
+        "input": { "mode": "text", "text": "我想剪那种到肩膀、有层次、稍微内扣的" },
+        "output": {
+          "ok": true,
+          "data": {
+            "candidates": [
+              { "style_id": "sty_layered_lob", "name_zh": "齐肩层次发", "confidence": 0.86 },
+              { "style_id": "sty_blunt_bob", "name_zh": "齐颈波波头", "confidence": 0.31 }
+            ],
+            "top": "sty_layered_lob",
+            "needs_clarification": false,
+            "suggested_service_id": "svc_cut_women"
+          }
+        }
+      },
+      "low_confidence": {
+        "input": { "mode": "text", "text": "就剪短一点，清爽点那种" },
+        "output": {
+          "ok": true,
+          "data": {
+            "candidates": [
+              { "style_id": "sty_pixie", "name_zh": "精灵短发", "confidence": 0.38 },
+              { "style_id": "sty_blunt_bob", "name_zh": "齐颈波波头", "confidence": 0.34 },
+              { "style_id": "sty_layered_lob", "name_zh": "齐肩层次发", "confidence": 0.28 }
+            ],
+            "top": null,
+            "needs_clarification": true,
+            "clarifying_question": "想剪到什么长度呢？耳上、齐下巴、还是到肩膀？"
+          },
+          "_agent_hint": "needs_clarification = true 时必须反问，不得替客户选一个。"
+        }
+      },
+      "image_consent_missing": {
+        "input": { "mode": "image", "image_ref": "binary.data0", "customer_id": "cus_1001" },
+        "output": {
+          "ok": false,
+          "error": {
+            "code": "PHOTO_CONSENT_REQUIRED",
+            "message": "该客户的 consent_flags.photo_upload = false",
+            "retryable": false
+          },
+          "_agent_hint": "先征得同意并写回 consent_flags，才能处理图片。"
+        }
+      }
+    },
+
+    // -------------------------------------------------------------------------
+    //  T6. hair_profile_read — 读发质档案
+    //  何时用：推荐服务或匹配发型师前，先看有没有既有档案。
+    //  【注意】source = "inferred" 且 confirmed_at = null 的字段【不得作为推荐依据】。
+    // -------------------------------------------------------------------------
+    "hair_profile_read": {
+      "success": {
+        "input": { "customer_id": "cus_1002" },
+        "output": {
+          "ok": true,
+          "data": {
+            "profile_id": "hp_1002",
+            "texture": { "value": "curly", "source": "self_reported", "usable_for_recommendation": true },
+            "density": { "value": "thick", "source": "self_reported", "usable_for_recommendation": true },
+            "porosity": { "value": "high", "source": "inferred", "usable_for_recommendation": false, "note": "未经客户确认" },
+            "scalp_sensitivity": { "value": "sensitive_to_bleach", "source": "self_reported", "usable_for_recommendation": true },
+            "chemical_history": [],
+            "updated_at": "2026-07-30T16:45:00+10:00",
+            "unconfirmed_fields": ["porosity"]
+          },
+          "_agent_hint": "可以就 porosity 向客户求证，但不能直接拿它推荐产品或服务。"
+        }
+      },
+      "not_found": {
+        "input": { "customer_id": "cus_1003" },
+        "output": {
+          "ok": true,
+          "data": {
+            "profile_id": null,
+            "message": "该客户尚无发质档案。",
+            "intake_questions": [
+              { "field": "texture", "question_zh": "你的头发自然状态是直发、微卷、卷发还是紧卷？", "options": ["straight", "wavy", "curly", "coily"] },
+              { "field": "density", "question_zh": "发量大概算少、中等还是多？", "options": ["fine", "medium", "thick"] },
+              { "field": "chemical_history", "question_zh": "最近一年有染、烫或漂过吗？" },
+              { "field": "scalp_sensitivity", "question_zh": "头皮对染烫产品有过不适反应吗？" }
+            ]
+          },
+          "_agent_hint": "走问卷，不要从对话或照片猜。"
+        }
+      }
+    },
+
+    // ========================= 写操作工具（高风险） =========================
+
+    // -------------------------------------------------------------------------
+    //  T7. hold_slot — 幂等占位，TTL 10 分钟
+    //  何时用：客户选定时段、准备确认前。
+    //  【硬约束】必须带 idempotency_key；同 key 重复调用返回同一个 hold。
+    // -------------------------------------------------------------------------
+    "hold_slot": {
+      "success": {
+        "input": {
+          "customer_id": "cus_1003",
+          "stylist_id": "stl_jayden",
+          "service_id": "svc_cut_men",
+          "start": "2026-09-16T10:00:00+10:00",
+          "idempotency_key": "idem_web8f3a_001"
+        },
+        "output": {
+          "ok": true,
+          "data": {
+            "hold_id": "hold_9001",
+            "status": "held",
+            "start": "2026-09-16T10:00:00+10:00",
+            "end": "2026-09-16T10:30:00+10:00",
+            "expires_at": "2026-09-12T09:20:00+10:00",
+            "ttl_seconds": 600,
+            "quoted_price_aud": 45,
+            "replayed": false
+          }
+        }
+      },
+      "idempotent_replay": {
+        "input": {
+          "customer_id": "cus_1003",
+          "stylist_id": "stl_jayden",
+          "service_id": "svc_cut_men",
+          "start": "2026-09-16T10:00:00+10:00",
+          "idempotency_key": "idem_web8f3a_001"
+        },
+        "output": {
+          "ok": true,
+          "data": {
+            "hold_id": "hold_9001",
+            "status": "held",
+            "expires_at": "2026-09-12T09:20:00+10:00",
+            "replayed": true
+          },
+          "_agent_hint": "replayed = true 表示这是重复调用，不是第二个 hold。不要告诉客户占了两个位。"
+        }
+      },
+      "conflict": {
+        "input": {
+          "customer_id": "cus_1002",
+          "stylist_id": "stl_priya",
+          "service_id": "svc_cut_curly",
+          "start": "2026-09-16T13:00:00+10:00",
+          "idempotency_key": "idem_wa202_007"
+        },
+        "output": {
+          "ok": false,
+          "error": {
+            "code": "SLOT_TAKEN",
+            "message": "该时段已被占用",
+            "retryable": false
+          },
+          "data": {
+            "alternatives": [
+              { "start": "2026-09-17T09:30:00+10:00", "end": "2026-09-17T11:00:00+10:00" },
+              { "start": "2026-09-18T15:00:00+10:00", "end": "2026-09-18T16:30:00+10:00" }
+            ]
+          },
+          "_agent_hint": "并发抢位的正常结果。道歉 + 给替代时段，不要重试同一个槽位。"
+        }
+      }
+    },
+
+    // -------------------------------------------------------------------------
+    //  T8. confirm_booking — 把 hold 转成确认预约
+    //  何时用：客户明确说"就这个时间"之后。
+    //  【硬约束】校验 hold 未过期；金额以本工具返回为准。
+    // -------------------------------------------------------------------------
+    "confirm_booking": {
+      "success": {
+        "input": {
+          "hold_id": "hold_9001",
+          "customer_id": "cus_1003",
+          "apply_promotion_id": "promo_first_visit",
+          "idempotency_key": "idem_web8f3a_002"
+        },
+        "output": {
+          "ok": true,
+          "data": {
+            "appointment_id": "apt_5006",
+            "status": "confirmed",
+            "customer_name": "Tom Becker",
+            "stylist_name": "Jayden Wu",
+            "service_name_en": "Men's Cut",
+            "start": "2026-09-16T10:00:00+10:00",
+            "end": "2026-09-16T10:30:00+10:00",
+            "pricing": {
+              "list_price_aud": 45,
+              "applied_promotion_id": "promo_first_visit",
+              "discount_aud": 9,
+              "total_aud": 36
+            },
+            "cancellation_policy": "开始前 24 小时以上取消免费；不足 24 小时收取 50% 费用。",
+            "confirmation_sent_to": "web_session_8f3a"
+          },
+          "_agent_hint": "转达金额时只能用 pricing.total_aud，不得自行计算。"
+        }
+      },
+      "hold_expired": {
+        "input": { "hold_id": "hold_8800", "customer_id": "cus_1002", "idempotency_key": "idem_wa202_009" },
+        "output": {
+          "ok": false,
+          "error": {
+            "code": "HOLD_EXPIRED",
+            "message": "占位已于 2026-09-12T09:10:00+10:00 过期",
+            "retryable": false
+          },
+          "_agent_hint": "重新走 find_slots → hold_slot，并告知客户时段已释放。"
+        }
+      }
+    },
+
+    // -------------------------------------------------------------------------
+    //  T9. cancel_reschedule — 取消 / 改期
+    //  【硬约束】只能操作【当前会话已识别客户】名下的预约。
+    //  customer_id 由会话上下文注入，不接受模型自由传入。
+    // -------------------------------------------------------------------------
+    "cancel_reschedule": {
+      "success_cancel": {
+        "input": { "appointment_id": "apt_5001", "action": "cancel", "customer_id": "cus_1001" },
+        "output": {
+          "ok": true,
+          "data": {
+            "appointment_id": "apt_5001",
+            "status": "cancelled",
+            "cancelled_at": "2026-09-12T09:05:00+10:00",
+            "notice_hours": 148.9,
+            "cancellation_fee_aud": 0,
+            "policy_applied": "24 小时以上通知 —— 免费取消"
+          }
+        }
+      },
+      "success_reschedule": {
+        "input": {
+          "appointment_id": "apt_5001",
+          "action": "reschedule",
+          "new_start": "2026-09-24T14:00:00+10:00",
+          "customer_id": "cus_1001"
+        },
+        "output": {
+          "ok": true,
+          "data": {
+            "appointment_id": "apt_5001",
+            "status": "confirmed",
+            "old_start": "2026-09-18T14:00:00+10:00",
+            "new_start": "2026-09-24T14:00:00+10:00",
+            "new_end": "2026-09-24T15:30:00+10:00",
+            "stylist_id": "stl_amy",
+            "price_aud": 130,
+            "fee_aud": 0
+          }
+        }
+      },
+      "not_owner": {
+        "input": { "appointment_id": "apt_5001", "action": "cancel", "customer_id": "cus_1003" },
+        "output": {
+          "ok": false,
+          "error": {
+            "code": "NOT_OWNER",
+            "message": "该预约不属于当前客户",
+            "retryable": false
+          },
+          "_agent_hint": "【安全用例】不得透露该预约的任何信息（属于谁、什么时间、什么项目）。只说查不到你名下的这条预约。"
+        }
+      },
+      "late_cancellation_fee": {
+        "input": { "appointment_id": "apt_5007", "action": "cancel", "customer_id": "cus_1002" },
+        "output": {
+          "ok": true,
+          "data": {
+            "appointment_id": "apt_5007",
+            "status": "cancelled",
+            "notice_hours": 6.5,
+            "cancellation_fee_aud": 65,
+            "policy_applied": "不足 24 小时 —— 收取 50% 费用",
+            "requires_human_review": true
+          },
+          "_agent_hint": "涉及收费争议倾向 → 按 PLAN.md §5，金额相关承诺前先走人工复核。"
+        }
+      }
+    },
+
+    // -------------------------------------------------------------------------
+    //  T10. hair_profile_write — 写发质档案
+    //  【硬约束】customer_confirmed 必须为 true 才写；每个字段必须带 source。
+    // -------------------------------------------------------------------------
+    "hair_profile_write": {
+      "success": {
+        "input": {
+          "customer_id": "cus_1003",
+          "fields": {
+            "texture": { "value": "wavy", "source": "self_reported" },
+            "density": { "value": "medium", "source": "self_reported" },
+            "chemical_history": []
+          },
+          "customer_confirmed": true,
+          "confirmed_utterance": "对，微卷，发量中等，没染过"
+        },
+        "output": {
+          "ok": true,
+          "data": {
+            "profile_id": "hp_1003",
+            "customer_id": "cus_1003",
+            "written_fields": ["texture", "density", "chemical_history"],
+            "confirmed_at": "2026-09-12T09:08:00+10:00",
+            "created": true
+          }
+        }
+      },
+      "confirmation_required": {
+        "input": {
+          "customer_id": "cus_1003",
+          "fields": { "porosity": { "value": "high", "source": "inferred" } },
+          "customer_confirmed": false
+        },
+        "output": {
+          "ok": false,
+          "error": {
+            "code": "CONFIRMATION_REQUIRED",
+            "message": "source = inferred 的字段必须经客户确认后才能写入",
+            "retryable": false
+          },
+          "_agent_hint": "先问客户「你的头发是不是比较吸水、洗完干得快？」，得到确认再写。"
+        }
+      }
+    },
+
+    // -------------------------------------------------------------------------
+    //  T11. escalate_to_human — 升级人工
+    //  【强制路径】健康问题 / 投诉 / 议价 / 退款 一律走这里，不得自行作答。
+    // -------------------------------------------------------------------------
+    "escalate_to_human": {
+      "health_topic": {
+        "input": {
+          "customer_id": "cus_1002",
+          "reason_code": "HEALTH_TOPIC",
+          "summary": "客户询问脱发加重该怎么处理，并问能否推荐生发产品",
+          "urgency": "normal",
+          "transcript_ref": "conv_7781"
+        },
+        "output": {
+          "ok": true,
+          "data": {
+            "ticket_id": "esc_3001",
+            "queue": "salon_manager",
+            "eta_minutes": 30,
+            "customer_message_zh": "这个问题我帮你转给店里的资深发型师，她们会更专业地给你建议。大概 30 分钟内会回复你。",
+            "customer_message_en": "I'll pass this to one of our senior stylists who can advise properly — they'll get back to you within about 30 minutes.",
+            "agent_must_not": ["提供任何诊断", "推荐任何生发/药用产品", "判断脱发原因"]
+          }
+        }
+      },
+      "complaint": {
+        "input": {
+          "customer_id": "cus_1001",
+          "reason_code": "COMPLAINT",
+          "summary": "客户对 2026-08-02 的补根染颜色不满意，要求免费重做",
+          "urgency": "high",
+          "transcript_ref": "conv_7782",
+          "related_appointment_id": "apt_5001"
+        },
+        "output": {
+          "ok": true,
+          "data": {
+            "ticket_id": "esc_3002",
+            "queue": "salon_manager",
+            "eta_minutes": 15,
+            "customer_message_zh": "很抱歉这次的效果没达到你的预期。我已经把情况转给店长，15 分钟内会有人联系你处理。",
+            "agent_must_not": ["承诺退款", "承诺免费重做", "判断责任归属"]
+          }
+        }
+      },
+      "price_negotiation": {
+        "input": {
+          "customer_id": "cus_1003",
+          "reason_code": "PRICE_NEGOTIATION",
+          "summary": "客户要求漂染打 5 折，称其他店更便宜",
+          "urgency": "low",
+          "transcript_ref": "conv_7783"
+        },
+        "output": {
+          "ok": true,
+          "data": {
+            "ticket_id": "esc_3003",
+            "queue": "salon_manager",
+            "eta_minutes": 60,
+            "customer_message_en": "Our listed price for that service is $420. I can't adjust pricing myself, but I've asked the manager to get in touch — they'll come back to you within the hour.",
+            "agent_must_not": ["给出任何未在 promotions 表中的折扣", "暗示价格可以谈"]
+          },
+          "_agent_hint": "可以复述 service_catalog 的原价和 get_promotions 的在售促销，仅此而已。"
+        }
+      }
+    }
+  }
+}
+
+// =============================================================================
+//  需要严格 JSON（去掉注释）时：
+//    npx strip-json-comments-cli mockdata.jsonc > mockdata.json
+//  或用 node：
+//    node -e "const s=require('strip-json-comments');console.log(JSON.stringify(JSON.parse(s(require('fs').readFileSync('mockdata.jsonc','utf8'))),null,2))" > mockdata.json
+// =============================================================================

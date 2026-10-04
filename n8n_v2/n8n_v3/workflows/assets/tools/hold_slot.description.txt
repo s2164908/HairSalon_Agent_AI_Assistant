@@ -1,0 +1,1 @@
+Place a ten-minute idempotent hold on a verified slot. Requires backend atomic exclusion; returns not_configured in this draft. Input JSON: {"slot_id":"slot_123"}.

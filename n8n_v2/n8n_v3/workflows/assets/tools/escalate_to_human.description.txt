@@ -1,0 +1,1 @@
+Flag the draft for the internal review queue: health questions, complaints, refunds, compensation, bargaining, or a genuine tool failure. It does NOT send anything to the customer. Input JSON: {"reason":"health"}.

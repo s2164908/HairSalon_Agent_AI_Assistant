@@ -1,0 +1,1 @@
+Cancel or reschedule, only with verified ownership and a configured cancellation policy. Returns not_configured in this draft. Never modify another person appointment. Input JSON: {"appointment_id":"apt_123","action":"cancel"}.

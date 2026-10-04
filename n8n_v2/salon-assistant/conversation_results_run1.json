@@ -1,0 +1,1203 @@
+[
+  {
+    "id": "progressive",
+    "title": "渐进补齐：每轮只给一点信息",
+    "sessionId": "conv-progressive-1789186647225",
+    "turns": [
+      {
+        "q": "我想剪个齐肩的层次发",
+        "status": 200,
+        "ms": 56577,
+        "output": "匹配的发型：齐肩层次发。请确认这是否是您想要的。\n女士剪发造型 - AUD 85.00 / 60 分钟\n男士剪发 - AUD 45.00 / 30 分钟\n卷发干剪 - AUD 130.00 / 90 分钟\n刘海修剪 - AUD 20.00 / 15 分钟\n补根染 - AUD 130.00 / 90 分钟\n手绘挑染 - AUD 320.00 / 180 分钟\n全头漂染 - AUD 420.00 / 240 分钟\n韩式数码烫 - AUD 350.00 / 210 分钟\n角蛋白顺滑 - AUD 290.00 / 180 分钟\nOlaplex 结构修复 - AUD 75.00 / 45 分钟\n吹造型 - AUD 55.00 / 45 分钟\n\n你想做哪项服务？",
+        "conv_status": "gathering",
+        "reason": "answered",
+        "ready": false,
+        "auto_sent": true,
+        "missing": [
+          "service",
+          "time_window",
+          "stylist",
+          "time_slot"
+        ],
+        "slots": {
+          "style": {
+            "taxonomy_id": "sty_layered_lob",
+            "name_en": "Layered Lob",
+            "name_zh": "齐肩层次发",
+            "verified_turn": 1
+          }
+        },
+        "metrics": {
+          "guardrail_pass": 1,
+          "errors_count": 0,
+          "hallucination_blocked": 0,
+          "tool_call_count": 4,
+          "escalated": 0,
+          "agent_failed": 0,
+          "tool_failures": 0,
+          "not_configured_hit": 0,
+          "slots_filled": 1,
+          "turn": 1,
+          "ready": 0
+        }
+      },
+      {
+        "q": "这周四下午方便",
+        "status": 200,
+        "ms": 11960,
+        "output": "女士剪发造型 - AUD 85.00 / 60 分钟\n匹配的发型：齐肩层次发。请确认这是否是您想要的。\n我可以帮你查可约的时段，但最后的锁定要由店员完成。\n\n可约时段（尚未锁定）：\n  1. Tue 15 Sept, 12:00-13:00 — Amy Chen\n\n已确认：服务：女士剪发造型 — AUD 85.00 / 60 分钟 · 发型：齐肩层次发 · 时间范围：2026-09-15 (afternoon)\n\n有指定的发型师吗？没有的话我可以推荐。",
+        "conv_status": "gathering",
+        "reason": "booking_setup_required",
+        "ready": false,
+        "auto_sent": true,
+        "missing": [
+          "stylist",
+          "time_slot"
+        ],
+        "slots": {
+          "style": {
+            "taxonomy_id": "sty_layered_lob",
+            "name_en": "Layered Lob",
+            "name_zh": "齐肩层次发",
+            "verified_turn": 2
+          },
+          "service": {
+            "id": "svc_cut_women",
+            "name": "Women's Cut & Style",
+            "name_zh": "女士剪发造型",
+            "price": 85,
+            "currency": "AUD",
+            "duration_min": 60,
+            "verified_turn": 2
+          },
+          "time": {
+            "window_from": "2026-09-15",
+            "window_to": "2026-09-15",
+            "day_part": "afternoon",
+            "window_label": "2026-09-15 (afternoon)",
+            "source": "model_extracted",
+            "verified_turn": 2,
+            "offered": [
+              {
+                "stylist_id": "stl_amy",
+                "stylist_name": "Amy Chen",
+                "start": "2026-09-15T02:00:00.000Z",
+                "end": "2026-09-15T03:00:00.000Z",
+                "label": "Tue 15 Sept, 12:00-13:00",
+                "reserved": false
+              }
+            ]
+          },
+          "quote": {
+            "list_price": 85,
+            "discount": 0,
+            "total": 85,
+            "currency": "AUD",
+            "computed_turn": 2
+          }
+        },
+        "metrics": {
+          "guardrail_pass": 1,
+          "errors_count": 0,
+          "hallucination_blocked": 0,
+          "tool_call_count": 7,
+          "escalated": 0,
+          "agent_failed": 0,
+          "tool_failures": 0,
+          "not_configured_hit": 1,
+          "slots_filled": 3,
+          "turn": 2,
+          "ready": 0
+        }
+      },
+      {
+        "q": "Amy",
+        "status": 200,
+        "ms": 7392,
+        "output": "Women's Cut & Style - AUD 85.00 / 60 minutes\nMatched hairstyle: Layered Lob. Please confirm this is what you mean.\n\nOpen times (not held yet):\n  1. Tue 15 Sept, 12:00-13:00 — Priya Raman\n\nSo far: Service: Women's Cut & Style — AUD 85.00 / 60 min · Style: Layered Lob · Stylist: Priya Raman · When: 2026-09-15 (afternoon)\n\nWhich of those times works for you?",
+        "conv_status": "gathering",
+        "reason": "answered",
+        "ready": false,
+        "auto_sent": true,
+        "missing": [
+          "time_slot"
+        ],
+        "slots": {
+          "style": {
+            "taxonomy_id": "sty_layered_lob",
+            "name_en": "Layered Lob",
+            "name_zh": "齐肩层次发",
+            "verified_turn": 3
+          },
+          "service": {
+            "id": "svc_cut_women",
+            "name": "Women's Cut & Style",
+            "name_zh": "女士剪发造型",
+            "price": 85,
+            "currency": "AUD",
+            "duration_min": 60,
+            "verified_turn": 3
+          },
+          "time": {
+            "window_from": "2026-09-15",
+            "window_to": "2026-09-15",
+            "day_part": "afternoon",
+            "window_label": "2026-09-15 (afternoon)",
+            "source": "model_extracted",
+            "verified_turn": 3,
+            "offered": [
+              {
+                "stylist_id": "stl_priya",
+                "stylist_name": "Priya Raman",
+                "start": "2026-09-15T02:00:00.000Z",
+                "end": "2026-09-15T03:00:00.000Z",
+                "label": "Tue 15 Sept, 12:00-13:00",
+                "reserved": false
+              }
+            ]
+          },
+          "quote": {
+            "list_price": 85,
+            "discount": 0,
+            "total": 85,
+            "currency": "AUD",
+            "computed_turn": 3
+          },
+          "stylist": {
+            "id": "stl_priya",
+            "name": "Priya Raman",
+            "reasons": [
+              "style_specialty",
+              "texture_experience",
+              "language_match"
+            ],
+            "verified_turn": 3
+          }
+        },
+        "metrics": {
+          "guardrail_pass": 1,
+          "errors_count": 0,
+          "hallucination_blocked": 0,
+          "tool_call_count": 3,
+          "escalated": 0,
+          "agent_failed": 0,
+          "tool_failures": 0,
+          "not_configured_hit": 0,
+          "slots_filled": 4,
+          "turn": 3,
+          "ready": 0
+        }
+      },
+      {
+        "q": "第一个时段就行",
+        "status": 200,
+        "ms": 3910,
+        "output": "女士剪发造型 - AUD 85.00 / 60 分钟\n匹配的发型：齐肩层次发。请确认这是否是您想要的。\n\n都齐了，帮你核对一下：\n  · 服务：女士剪发造型 — AUD 85.00 / 60 分钟\n  · 发型：齐肩层次发\n  · 发型师：Priya Raman\n  · 时间：Tue 15 Sept, 12:00-13:00\n  · 价格：AUD 85.00\n这个时段还没有锁定——确认后我转给店员帮你正式预约。没问题吗？",
+        "conv_status": "ready",
+        "reason": "answered",
+        "ready": true,
+        "auto_sent": true,
+        "missing": [],
+        "slots": {
+          "style": {
+            "taxonomy_id": "sty_layered_lob",
+            "name_en": "Layered Lob",
+            "name_zh": "齐肩层次发",
+            "verified_turn": 4
+          },
+          "service": {
+            "id": "svc_cut_women",
+            "name": "Women's Cut & Style",
+            "name_zh": "女士剪发造型",
+            "price": 85,
+            "currency": "AUD",
+            "duration_min": 60,
+            "verified_turn": 4
+          },
+          "time": {
+            "window_from": "2026-09-15",
+            "window_to": "2026-09-15",
+            "day_part": "afternoon",
+            "window_label": "2026-09-15 (afternoon)",
+            "source": "model_extracted",
+            "verified_turn": 4,
+            "offered": [
+              {
+                "stylist_id": "stl_priya",
+                "stylist_name": "Priya Raman",
+                "start": "2026-09-15T02:00:00.000Z",
+                "end": "2026-09-15T03:00:00.000Z",
+                "label": "Tue 15 Sept, 12:00-13:00",
+                "reserved": false
+              }
+            ],
+            "chosen_slot": {
+              "stylist_id": "stl_priya",
+              "stylist_name": "Priya Raman",
+              "start": "2026-09-15T02:00:00.000Z",
+              "end": "2026-09-15T03:00:00.000Z",
+              "label": "Tue 15 Sept, 12:00-13:00",
+              "reserved": false
+            }
+          },
+          "quote": {
+            "list_price": 85,
+            "discount": 0,
+            "total": 85,
+            "currency": "AUD",
+            "computed_turn": 4
+          },
+          "stylist": {
+            "id": "stl_priya",
+            "name": "Priya Raman",
+            "reasons": [
+              "style_specialty",
+              "texture_experience",
+              "language_match"
+            ],
+            "verified_turn": 4
+          }
+        },
+        "metrics": {
+          "guardrail_pass": 1,
+          "errors_count": 0,
+          "hallucination_blocked": 0,
+          "tool_call_count": 1,
+          "escalated": 0,
+          "agent_failed": 0,
+          "tool_failures": 0,
+          "not_configured_hit": 0,
+          "slots_filled": 5,
+          "turn": 4,
+          "ready": 1
+        }
+      }
+    ]
+  },
+  {
+    "id": "all_at_once",
+    "title": "一次说全：应当直接逼近 ready",
+    "sessionId": "conv-all_at_once-1789186727066",
+    "turns": [
+      {
+        "q": "I'd like a men's cut with Jayden on Thursday morning",
+        "status": 200,
+        "ms": 28548,
+        "output": "I've passed this to a colleague at the salon — they'll get back to you shortly.",
+        "conv_status": "escalated",
+        "reason": "agent_escalation",
+        "ready": false,
+        "auto_sent": false,
+        "missing": [
+          "service",
+          "style",
+          "time_window",
+          "stylist",
+          "time_slot"
+        ],
+        "slots": {},
+        "metrics": {
+          "guardrail_pass": 1,
+          "errors_count": 0,
+          "hallucination_blocked": 0,
+          "tool_call_count": 6,
+          "escalated": 1,
+          "agent_failed": 0,
+          "tool_failures": 1,
+          "not_configured_hit": 0,
+          "slots_filled": 0,
+          "turn": 1,
+          "ready": 0
+        }
+      }
+    ]
+  },
+  {
+    "id": "change_mind",
+    "title": "中途改主意：只重算时间，其余保留",
+    "sessionId": "conv-change_mind-1789186755615",
+    "turns": [
+      {
+        "q": "I want a men's cut",
+        "status": 200,
+        "ms": 18692,
+        "output": "Men's Cut - AUD 45.00 / 30 minutes\n\nOpen times (not held yet):\n  1. Sat 12 Sept, 14:30-15:00 — Amy Chen\n  2. Sun 13 Sept, 10:00-10:30 — Jayden Wu\n\nSo far: Service: Men's Cut — AUD 45.00 / 30 min · Stylist: no preference · When: 2026-09-12\n\nWhat hairstyle are you after?",
+        "conv_status": "gathering",
+        "reason": "answered",
+        "ready": false,
+        "auto_sent": true,
+        "missing": [
+          "style",
+          "time_slot"
+        ],
+        "slots": {
+          "service": {
+            "id": "svc_cut_men",
+            "name": "Men's Cut",
+            "name_zh": "男士剪发",
+            "price": 45,
+            "currency": "AUD",
+            "duration_min": 30,
+            "verified_turn": 1
+          },
+          "stylist": {
+            "any": true,
+            "verified_turn": 1
+          },
+          "time": {
+            "window_from": "2026-09-12",
+            "window_to": "2026-09-12",
+            "day_part": null,
+            "window_label": "2026-09-12",
+            "source": "model_extracted",
+            "verified_turn": 1,
+            "offered": [
+              {
+                "stylist_id": "stl_amy",
+                "stylist_name": "Amy Chen",
+                "start": "2026-09-12T04:30:00.000Z",
+                "end": "2026-09-12T05:00:00.000Z",
+                "label": "Sat 12 Sept, 14:30-15:00",
+                "reserved": false
+              },
+              {
+                "stylist_id": "stl_jayden",
+                "stylist_name": "Jayden Wu",
+                "start": "2026-09-13T00:00:00.000Z",
+                "end": "2026-09-13T00:30:00.000Z",
+                "label": "Sun 13 Sept, 10:00-10:30",
+                "reserved": false
+              }
+            ]
+          },
+          "quote": {
+            "list_price": 45,
+            "discount": 0,
+            "total": 45,
+            "currency": "AUD",
+            "computed_turn": 1
+          }
+        },
+        "metrics": {
+          "guardrail_pass": 1,
+          "errors_count": 0,
+          "hallucination_blocked": 0,
+          "tool_call_count": 2,
+          "escalated": 0,
+          "agent_failed": 0,
+          "tool_failures": 0,
+          "not_configured_hit": 0,
+          "slots_filled": 3,
+          "turn": 1,
+          "ready": 0
+        }
+      },
+      {
+        "q": "Thursday afternoon",
+        "status": 200,
+        "ms": 4113,
+        "output": "I've passed this to a colleague at the salon — they'll get back to you shortly.",
+        "conv_status": "escalated",
+        "reason": "guardrail_blocked",
+        "ready": false,
+        "auto_sent": false,
+        "missing": [
+          "style",
+          "time_slot"
+        ],
+        "slots": {
+          "service": {
+            "id": "svc_cut_men",
+            "name": "Men's Cut",
+            "name_zh": "男士剪发",
+            "price": 45,
+            "currency": "AUD",
+            "duration_min": 30,
+            "verified_turn": 1
+          },
+          "stylist": {
+            "any": true,
+            "verified_turn": 1
+          },
+          "time": {
+            "window_from": "2026-09-12",
+            "window_to": "2026-09-12",
+            "day_part": null,
+            "window_label": "2026-09-12",
+            "source": "model_extracted",
+            "verified_turn": 1,
+            "offered": [
+              {
+                "stylist_id": "stl_amy",
+                "stylist_name": "Amy Chen",
+                "start": "2026-09-12T04:30:00.000Z",
+                "end": "2026-09-12T05:00:00.000Z",
+                "label": "Sat 12 Sept, 14:30-15:00",
+                "reserved": false
+              },
+              {
+                "stylist_id": "stl_jayden",
+                "stylist_name": "Jayden Wu",
+                "start": "2026-09-13T00:00:00.000Z",
+                "end": "2026-09-13T00:30:00.000Z",
+                "label": "Sun 13 Sept, 10:00-10:30",
+                "reserved": false
+              }
+            ]
+          },
+          "quote": {
+            "list_price": 45,
+            "discount": 0,
+            "total": 45,
+            "currency": "AUD",
+            "computed_turn": 1
+          }
+        },
+        "metrics": {
+          "guardrail_pass": 0,
+          "errors_count": 2,
+          "hallucination_blocked": 2,
+          "tool_call_count": 1,
+          "escalated": 1,
+          "agent_failed": 0,
+          "tool_failures": 0,
+          "not_configured_hit": 0,
+          "slots_filled": 3,
+          "turn": 2,
+          "ready": 0
+        }
+      },
+      {
+        "q": "actually can we do Friday instead?",
+        "status": 200,
+        "ms": 3258,
+        "output": "I've passed this to a colleague at the salon — they'll get back to you shortly.",
+        "conv_status": "escalated",
+        "reason": "guardrail_blocked",
+        "ready": false,
+        "auto_sent": false,
+        "missing": [
+          "style",
+          "time_slot"
+        ],
+        "slots": {
+          "service": {
+            "id": "svc_cut_men",
+            "name": "Men's Cut",
+            "name_zh": "男士剪发",
+            "price": 45,
+            "currency": "AUD",
+            "duration_min": 30,
+            "verified_turn": 1
+          },
+          "stylist": {
+            "any": true,
+            "verified_turn": 1
+          },
+          "time": {
+            "window_from": "2026-09-12",
+            "window_to": "2026-09-12",
+            "day_part": null,
+            "window_label": "2026-09-12",
+            "source": "model_extracted",
+            "verified_turn": 1,
+            "offered": [
+              {
+                "stylist_id": "stl_amy",
+                "stylist_name": "Amy Chen",
+                "start": "2026-09-12T04:30:00.000Z",
+                "end": "2026-09-12T05:00:00.000Z",
+                "label": "Sat 12 Sept, 14:30-15:00",
+                "reserved": false
+              },
+              {
+                "stylist_id": "stl_jayden",
+                "stylist_name": "Jayden Wu",
+                "start": "2026-09-13T00:00:00.000Z",
+                "end": "2026-09-13T00:30:00.000Z",
+                "label": "Sun 13 Sept, 10:00-10:30",
+                "reserved": false
+              }
+            ]
+          },
+          "quote": {
+            "list_price": 45,
+            "discount": 0,
+            "total": 45,
+            "currency": "AUD",
+            "computed_turn": 1
+          }
+        },
+        "metrics": {
+          "guardrail_pass": 0,
+          "errors_count": 2,
+          "hallucination_blocked": 2,
+          "tool_call_count": 1,
+          "escalated": 1,
+          "agent_failed": 0,
+          "tool_failures": 0,
+          "not_configured_hit": 0,
+          "slots_filled": 3,
+          "turn": 3,
+          "ready": 0
+        }
+      }
+    ]
+  },
+  {
+    "id": "cross_turn_ref",
+    "title": "跨轮指代：第二轮不重复说服务名",
+    "sessionId": "conv-cross_turn_ref-1789186781680",
+    "turns": [
+      {
+        "q": "do you have any promotions?",
+        "status": 200,
+        "ms": 10073,
+        "output": "I've passed this to a colleague at the salon — they'll get back to you shortly.",
+        "conv_status": "escalated",
+        "reason": "tool_failure",
+        "ready": false,
+        "auto_sent": false,
+        "missing": [
+          "style",
+          "stylist",
+          "time_slot"
+        ],
+        "slots": {
+          "service": {
+            "id": "svc_cut_women",
+            "name": "Women's Cut & Style",
+            "name_zh": "女士剪发造型",
+            "price": 85,
+            "currency": "AUD",
+            "duration_min": 60,
+            "verified_turn": 1
+          },
+          "time": {
+            "window_from": "2026-09-12",
+            "window_to": "2026-09-12",
+            "day_part": null,
+            "window_label": "2026-09-12",
+            "source": "model_extracted",
+            "verified_turn": 1,
+            "offered": [
+              {
+                "stylist_id": "stl_amy",
+                "stylist_name": "Amy Chen",
+                "start": "2026-09-12T04:30:00.000Z",
+                "end": "2026-09-12T05:30:00.000Z",
+                "label": "Sat 12 Sept, 14:30-15:30",
+                "reserved": false
+              },
+              {
+                "stylist_id": "stl_jayden",
+                "stylist_name": "Jayden Wu",
+                "start": "2026-09-13T00:00:00.000Z",
+                "end": "2026-09-13T01:00:00.000Z",
+                "label": "Sun 13 Sept, 10:00-11:00",
+                "reserved": false
+              }
+            ]
+          },
+          "promotion": {
+            "id": "promo_open_all",
+            "title": "Spring Refresh - 10% off any service",
+            "title_zh": "春季焕新 全场 9 折",
+            "discount": "{\"type\":\"percent\",\"value\":10}",
+            "verified_turn": 1
+          },
+          "quote": {
+            "list_price": 85,
+            "discount": 8.5,
+            "total": 76.5,
+            "currency": "AUD",
+            "computed_turn": 1
+          }
+        },
+        "metrics": {
+          "guardrail_pass": 1,
+          "errors_count": 0,
+          "hallucination_blocked": 0,
+          "tool_call_count": 6,
+          "escalated": 1,
+          "agent_failed": 0,
+          "tool_failures": 2,
+          "not_configured_hit": 0,
+          "slots_filled": 2,
+          "turn": 1,
+          "ready": 0
+        }
+      },
+      {
+        "q": "how much is a women's cut?",
+        "status": 200,
+        "ms": 20148,
+        "output": "Women's Cut & Style - AUD 85.00 / 60 minutes\n\nSo far: Service: Women's Cut & Style — AUD 85.00 / 60 min · When: 2026-09-12\n\nWhat hairstyle are you after?\nAny stylist in particular? I can recommend one if not.",
+        "conv_status": "gathering",
+        "reason": "answered",
+        "ready": false,
+        "auto_sent": true,
+        "missing": [
+          "style",
+          "stylist",
+          "time_slot"
+        ],
+        "slots": {
+          "service": {
+            "id": "svc_cut_women",
+            "name": "Women's Cut & Style",
+            "name_zh": "女士剪发造型",
+            "price": 85,
+            "currency": "AUD",
+            "duration_min": 60,
+            "verified_turn": 2
+          },
+          "time": {
+            "window_from": "2026-09-12",
+            "window_to": "2026-09-12",
+            "day_part": null,
+            "window_label": "2026-09-12",
+            "source": "model_extracted",
+            "verified_turn": 1,
+            "offered": [
+              {
+                "stylist_id": "stl_amy",
+                "stylist_name": "Amy Chen",
+                "start": "2026-09-12T04:30:00.000Z",
+                "end": "2026-09-12T05:30:00.000Z",
+                "label": "Sat 12 Sept, 14:30-15:30",
+                "reserved": false
+              },
+              {
+                "stylist_id": "stl_jayden",
+                "stylist_name": "Jayden Wu",
+                "start": "2026-09-13T00:00:00.000Z",
+                "end": "2026-09-13T01:00:00.000Z",
+                "label": "Sun 13 Sept, 10:00-11:00",
+                "reserved": false
+              }
+            ]
+          },
+          "promotion": {
+            "id": "promo_open_all",
+            "title": "Spring Refresh - 10% off any service",
+            "title_zh": "春季焕新 全场 9 折",
+            "discount": "{\"type\":\"percent\",\"value\":10}",
+            "verified_turn": 2
+          },
+          "quote": {
+            "list_price": 85,
+            "discount": 8.5,
+            "total": 76.5,
+            "currency": "AUD",
+            "computed_turn": 2
+          }
+        },
+        "metrics": {
+          "guardrail_pass": 1,
+          "errors_count": 0,
+          "hallucination_blocked": 0,
+          "tool_call_count": 4,
+          "escalated": 0,
+          "agent_failed": 0,
+          "tool_failures": 0,
+          "not_configured_hit": 0,
+          "slots_filled": 2,
+          "turn": 2,
+          "ready": 0
+        }
+      },
+      {
+        "q": "does that promotion apply to it?",
+        "status": 200,
+        "ms": 5295,
+        "output": "Women's Cut & Style - AUD 85.00 / 60 minutes\n\nSo far: Service: Women's Cut & Style — AUD 85.00 / 60 min · When: 2026-09-12\n\nWhat hairstyle are you after?\nAny stylist in particular? I can recommend one if not.",
+        "conv_status": "gathering",
+        "reason": "answered",
+        "ready": false,
+        "auto_sent": true,
+        "missing": [
+          "style",
+          "stylist",
+          "time_slot"
+        ],
+        "slots": {
+          "service": {
+            "id": "svc_cut_women",
+            "name": "Women's Cut & Style",
+            "name_zh": "女士剪发造型",
+            "price": 85,
+            "currency": "AUD",
+            "duration_min": 60,
+            "verified_turn": 3
+          },
+          "time": {
+            "window_from": "2026-09-12",
+            "window_to": "2026-09-12",
+            "day_part": null,
+            "window_label": "2026-09-12",
+            "source": "model_extracted",
+            "verified_turn": 1,
+            "offered": [
+              {
+                "stylist_id": "stl_amy",
+                "stylist_name": "Amy Chen",
+                "start": "2026-09-12T04:30:00.000Z",
+                "end": "2026-09-12T05:30:00.000Z",
+                "label": "Sat 12 Sept, 14:30-15:30",
+                "reserved": false
+              },
+              {
+                "stylist_id": "stl_jayden",
+                "stylist_name": "Jayden Wu",
+                "start": "2026-09-13T00:00:00.000Z",
+                "end": "2026-09-13T01:00:00.000Z",
+                "label": "Sun 13 Sept, 10:00-11:00",
+                "reserved": false
+              }
+            ]
+          },
+          "promotion": {
+            "id": "promo_open_all",
+            "title": "Spring Refresh - 10% off any service",
+            "title_zh": "春季焕新 全场 9 折",
+            "discount": "{\"type\":\"percent\",\"value\":10}",
+            "verified_turn": 3
+          },
+          "quote": {
+            "list_price": 85,
+            "discount": 8.5,
+            "total": 76.5,
+            "currency": "AUD",
+            "computed_turn": 3
+          }
+        },
+        "metrics": {
+          "guardrail_pass": 1,
+          "errors_count": 0,
+          "hallucination_blocked": 0,
+          "tool_call_count": 3,
+          "escalated": 0,
+          "agent_failed": 0,
+          "tool_failures": 0,
+          "not_configured_hit": 0,
+          "slots_filled": 2,
+          "turn": 3,
+          "ready": 0
+        }
+      }
+    ]
+  },
+  {
+    "id": "escalate_midflow",
+    "title": "中途升级：旁路后槽位必须还在",
+    "sessionId": "conv-escalate_midflow-1789186817196",
+    "turns": [
+      {
+        "q": "I'd like a women's cut",
+        "status": 200,
+        "ms": 16791,
+        "output": "I've passed this to a colleague at the salon — they'll get back to you shortly.",
+        "conv_status": "escalated",
+        "reason": "guardrail_blocked",
+        "ready": false,
+        "auto_sent": false,
+        "missing": [
+          "service",
+          "style",
+          "time_window",
+          "stylist",
+          "time_slot"
+        ],
+        "slots": {},
+        "metrics": {
+          "guardrail_pass": 0,
+          "errors_count": 4,
+          "hallucination_blocked": 4,
+          "tool_call_count": 2,
+          "escalated": 1,
+          "agent_failed": 0,
+          "tool_failures": 0,
+          "not_configured_hit": 0,
+          "slots_filled": 0,
+          "turn": 1,
+          "ready": 0
+        }
+      },
+      {
+        "q": "我最近掉发很严重怎么办",
+        "status": 200,
+        "ms": 2980,
+        "output": "这个问题我帮你转给店里的同事，他们会尽快回复你。",
+        "conv_status": "escalated",
+        "reason": "agent_escalation",
+        "ready": false,
+        "auto_sent": false,
+        "missing": [
+          "service",
+          "style",
+          "time_window",
+          "stylist",
+          "time_slot"
+        ],
+        "slots": {},
+        "metrics": {
+          "guardrail_pass": 1,
+          "errors_count": 0,
+          "hallucination_blocked": 0,
+          "tool_call_count": 1,
+          "escalated": 1,
+          "agent_failed": 0,
+          "tool_failures": 0,
+          "not_configured_hit": 0,
+          "slots_filled": 0,
+          "turn": 2,
+          "ready": 0
+        }
+      },
+      {
+        "q": "ok, Thursday afternoon then",
+        "status": 200,
+        "ms": 25369,
+        "output": "Women's Cut & Style - AUD 85.00 / 60 minutes\n\nOpen times (not held yet):\n  1. Tue 15 Sept, 12:00-13:00 — Amy Chen\n\nSo far: Stylist: no preference · When: 2026-09-15 (afternoon)\n\nWhich service would you like?\nWhat hairstyle are you after?",
+        "conv_status": "gathering",
+        "reason": "answered",
+        "ready": false,
+        "auto_sent": true,
+        "missing": [
+          "service",
+          "style",
+          "time_slot"
+        ],
+        "slots": {
+          "stylist": {
+            "any": true,
+            "verified_turn": 3
+          },
+          "time": {
+            "window_from": "2026-09-15",
+            "window_to": "2026-09-15",
+            "day_part": "afternoon",
+            "window_label": "2026-09-15 (afternoon)",
+            "source": "model_extracted",
+            "verified_turn": 3,
+            "offered": [
+              {
+                "stylist_id": "stl_amy",
+                "stylist_name": "Amy Chen",
+                "start": "2026-09-15T02:00:00.000Z",
+                "end": "2026-09-15T03:00:00.000Z",
+                "label": "Tue 15 Sept, 12:00-13:00",
+                "reserved": false
+              }
+            ]
+          }
+        },
+        "metrics": {
+          "guardrail_pass": 1,
+          "errors_count": 0,
+          "hallucination_blocked": 0,
+          "tool_call_count": 5,
+          "escalated": 0,
+          "agent_failed": 0,
+          "tool_failures": 0,
+          "not_configured_hit": 1,
+          "slots_filled": 2,
+          "turn": 3,
+          "ready": 0
+        }
+      }
+    ]
+  },
+  {
+    "id": "reset",
+    "title": "重置：顾客要求重新开始",
+    "sessionId": "conv-reset-1789186862336",
+    "turns": [
+      {
+        "q": "I want a men's cut",
+        "status": 200,
+        "ms": 81600,
+        "output": "Men's Cut - AUD 45.00 / 30 minutes\n\nOpen times (not held yet):\n  1. Sat 12 Sept, 14:30-15:00 — Amy Chen\n\nSo far: Service: Men's Cut — AUD 45.00 / 30 min · Stylist: no preference\n\nWhat hairstyle are you after?\nWhen suits you — which day, and morning or afternoon?",
+        "conv_status": "gathering",
+        "reason": "answered",
+        "ready": false,
+        "auto_sent": true,
+        "missing": [
+          "style",
+          "time_window",
+          "time_slot"
+        ],
+        "slots": {
+          "service": {
+            "id": "svc_cut_men",
+            "name": "Men's Cut",
+            "name_zh": "男士剪发",
+            "price": 45,
+            "currency": "AUD",
+            "duration_min": 30,
+            "verified_turn": 1
+          },
+          "stylist": {
+            "any": true,
+            "verified_turn": 1
+          },
+          "time": {
+            "offered": [
+              {
+                "stylist_id": "stl_amy",
+                "stylist_name": "Amy Chen",
+                "start": "2026-09-12T04:30:00.000Z",
+                "end": "2026-09-12T05:00:00.000Z",
+                "label": "Sat 12 Sept, 14:30-15:00",
+                "reserved": false
+              }
+            ]
+          },
+          "quote": {
+            "list_price": 45,
+            "discount": 0,
+            "total": 45,
+            "currency": "AUD",
+            "computed_turn": 1
+          }
+        },
+        "metrics": {
+          "guardrail_pass": 1,
+          "errors_count": 0,
+          "hallucination_blocked": 0,
+          "tool_call_count": 4,
+          "escalated": 0,
+          "agent_failed": 0,
+          "tool_failures": 0,
+          "not_configured_hit": 0,
+          "slots_filled": 2,
+          "turn": 1,
+          "ready": 0
+        }
+      },
+      {
+        "q": "重新开始",
+        "status": 200,
+        "ms": 5885,
+        "output": "卷发干剪 - AUD 130.00 / 90 分钟\n匹配的发型：卷发干剪塑形。请确认这是否是您想要的。\n\n可约时段（尚未锁定）：\n  1. Sat 12 Sept, 14:30-16:00 — Priya Raman\n  2. Tue 15 Sept, 12:00-13:30 — Priya Raman\n  3. Wed 16 Sept, 12:30-14:00 — Priya Raman\n  4. Thu 17 Sept, 12:00-13:30 — Priya Raman\n  5. Fri 18 Sept, 12:00-13:30 — Priya Raman\n\n已确认：服务：卷发干剪 — AUD 130.00 / 90 分钟 · 发型师：Priya Raman · 时间范围：2026-09-12 .. 2026-09-19 (afternoon)\n\n想要什么发型？",
+        "conv_status": "gathering",
+        "reason": "answered",
+        "ready": false,
+        "auto_sent": true,
+        "missing": [
+          "style",
+          "time_slot"
+        ],
+        "slots": {
+          "service": {
+            "id": "svc_cut_curly",
+            "name": "Curly Cut (dry)",
+            "name_zh": "卷发干剪",
+            "price": 130,
+            "currency": "AUD",
+            "duration_min": 90,
+            "verified_turn": 1
+          },
+          "stylist": {
+            "id": "stl_priya",
+            "name": "Priya Raman",
+            "reasons": [
+              "style_specialty"
+            ],
+            "verified_turn": 1
+          },
+          "time": {
+            "window_from": "2026-09-12",
+            "window_to": "2026-09-19",
+            "day_part": "afternoon",
+            "window_label": "2026-09-12 .. 2026-09-19 (afternoon)",
+            "source": "model_extracted",
+            "verified_turn": 1,
+            "offered": [
+              {
+                "stylist_id": "stl_priya",
+                "stylist_name": "Priya Raman",
+                "start": "2026-09-12T04:30:00.000Z",
+                "end": "2026-09-12T06:00:00.000Z",
+                "label": "Sat 12 Sept, 14:30-16:00",
+                "reserved": false
+              },
+              {
+                "stylist_id": "stl_priya",
+                "stylist_name": "Priya Raman",
+                "start": "2026-09-15T02:00:00.000Z",
+                "end": "2026-09-15T03:30:00.000Z",
+                "label": "Tue 15 Sept, 12:00-13:30",
+                "reserved": false
+              },
+              {
+                "stylist_id": "stl_priya",
+                "stylist_name": "Priya Raman",
+                "start": "2026-09-16T02:30:00.000Z",
+                "end": "2026-09-16T04:00:00.000Z",
+                "label": "Wed 16 Sept, 12:30-14:00",
+                "reserved": false
+              },
+              {
+                "stylist_id": "stl_priya",
+                "stylist_name": "Priya Raman",
+                "start": "2026-09-17T02:00:00.000Z",
+                "end": "2026-09-17T03:30:00.000Z",
+                "label": "Thu 17 Sept, 12:00-13:30",
+                "reserved": false
+              },
+              {
+                "stylist_id": "stl_priya",
+                "stylist_name": "Priya Raman",
+                "start": "2026-09-18T02:00:00.000Z",
+                "end": "2026-09-18T03:30:00.000Z",
+                "label": "Fri 18 Sept, 12:00-13:30",
+                "reserved": false
+              },
+              {
+                "stylist_id": "stl_priya",
+                "stylist_name": "Priya Raman",
+                "start": "2026-09-19T02:00:00.000Z",
+                "end": "2026-09-19T03:30:00.000Z",
+                "label": "Sat 19 Sept, 12:00-13:30",
+                "reserved": false
+              }
+            ]
+          },
+          "quote": {
+            "list_price": 130,
+            "discount": 0,
+            "total": 130,
+            "currency": "AUD",
+            "computed_turn": 1
+          }
+        },
+        "metrics": {
+          "guardrail_pass": 1,
+          "errors_count": 0,
+          "hallucination_blocked": 0,
+          "tool_call_count": 3,
+          "escalated": 0,
+          "agent_failed": 0,
+          "tool_failures": 0,
+          "not_configured_hit": 0,
+          "slots_filled": 3,
+          "turn": 1,
+          "ready": 0
+        }
+      },
+      {
+        "q": "what services do you offer?",
+        "status": 200,
+        "ms": 5076,
+        "output": "Curly Cut (dry) - AUD 130.00 / 90 minutes\n\nOpen times (not held yet):\n  1. Sat 12 Sept, 14:30-16:00 — Priya Raman\n  2. Tue 15 Sept, 12:00-13:30 — Priya Raman\n  3. Wed 16 Sept, 12:30-14:00 — Priya Raman\n  4. Thu 17 Sept, 12:00-13:30 — Priya Raman\n  5. Fri 18 Sept, 12:00-13:30 — Priya Raman\n\nSo far: Service: Curly Cut (dry) — AUD 130.00 / 90 min · Stylist: Priya Raman · When: 2026-09-12 .. 2026-09-19 (afternoon)\n\nWhat hairstyle are you after?",
+        "conv_status": "gathering",
+        "reason": "answered",
+        "ready": false,
+        "auto_sent": true,
+        "missing": [
+          "style",
+          "time_slot"
+        ],
+        "slots": {
+          "service": {
+            "id": "svc_cut_curly",
+            "name": "Curly Cut (dry)",
+            "name_zh": "卷发干剪",
+            "price": 130,
+            "currency": "AUD",
+            "duration_min": 90,
+            "verified_turn": 2
+          },
+          "stylist": {
+            "id": "stl_priya",
+            "name": "Priya Raman",
+            "reasons": [
+              "style_specialty"
+            ],
+            "verified_turn": 2
+          },
+          "time": {
+            "window_from": "2026-09-12",
+            "window_to": "2026-09-19",
+            "day_part": "afternoon",
+            "window_label": "2026-09-12 .. 2026-09-19 (afternoon)",
+            "source": "model_extracted",
+            "verified_turn": 2,
+            "offered": [
+              {
+                "stylist_id": "stl_priya",
+                "stylist_name": "Priya Raman",
+                "start": "2026-09-12T04:30:00.000Z",
+                "end": "2026-09-12T06:00:00.000Z",
+                "label": "Sat 12 Sept, 14:30-16:00",
+                "reserved": false
+              },
+              {
+                "stylist_id": "stl_priya",
+                "stylist_name": "Priya Raman",
+                "start": "2026-09-15T02:00:00.000Z",
+                "end": "2026-09-15T03:30:00.000Z",
+                "label": "Tue 15 Sept, 12:00-13:30",
+                "reserved": false
+              },
+              {
+                "stylist_id": "stl_priya",
+                "stylist_name": "Priya Raman",
+                "start": "2026-09-16T02:30:00.000Z",
+                "end": "2026-09-16T04:00:00.000Z",
+                "label": "Wed 16 Sept, 12:30-14:00",
+                "reserved": false
+              },
+              {
+                "stylist_id": "stl_priya",
+                "stylist_name": "Priya Raman",
+                "start": "2026-09-17T02:00:00.000Z",
+                "end": "2026-09-17T03:30:00.000Z",
+                "label": "Thu 17 Sept, 12:00-13:30",
+                "reserved": false
+              },
+              {
+                "stylist_id": "stl_priya",
+                "stylist_name": "Priya Raman",
+                "start": "2026-09-18T02:00:00.000Z",
+                "end": "2026-09-18T03:30:00.000Z",
+                "label": "Fri 18 Sept, 12:00-13:30",
+                "reserved": false
+              },
+              {
+                "stylist_id": "stl_priya",
+                "stylist_name": "Priya Raman",
+                "start": "2026-09-19T02:00:00.000Z",
+                "end": "2026-09-19T03:30:00.000Z",
+                "label": "Sat 19 Sept, 12:00-13:30",
+                "reserved": false
+              }
+            ]
+          },
+          "quote": {
+            "list_price": 130,
+            "discount": 0,
+            "total": 130,
+            "currency": "AUD",
+            "computed_turn": 2
+          }
+        },
+        "metrics": {
+          "guardrail_pass": 1,
+          "errors_count": 0,
+          "hallucination_blocked": 0,
+          "tool_call_count": 2,
+          "escalated": 0,
+          "agent_failed": 0,
+          "tool_failures": 0,
+          "not_configured_hit": 0,
+          "slots_filled": 3,
+          "turn": 2,
+          "ready": 0
+        }
+      }
+    ]
+  }
+]

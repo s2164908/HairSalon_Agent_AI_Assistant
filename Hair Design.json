@@ -1,0 +1,295 @@
+{
+  "name": "Salon Style",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Salon Style — Hairstyle Designer",
+        "formDescription": "Upload a clear, well-lit photo showing your full head and current hair. We'll suggest hairstyles that suit you.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Your photo",
+              "fieldType": "file",
+              "fieldName": "photo",
+              "multipleFiles": false,
+              "acceptFileTypes": ".jpg,.jpeg,.png,.webp",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "400250ed-9589-4984-8ebb-e907118a98e6",
+      "name": "Photo Upload",
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.6,
+      "position": [
+        -2448,
+        -64
+      ],
+      "webhookId": "be94462b-6e99-4b4b-adf9-75ff63f58adf"
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "operation": "analyze",
+        "modelId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o"
+        },
+        "text": "You are a professional hairstylist's assistant analyzing a customer photo.\n\nFirst judge whether the photo is USABLE for a hairstyle recommendation. A usable photo:\n- shows exactly one person\n- clearly shows the head, face and current hair\n- is reasonably well-lit and in focus\n\nRespond with ONLY a raw JSON object (no markdown, no code fences) in this exact shape:\n{\n  \"is_valid\": true or false,\n  \"reason\": \"short explanation of why the photo is or isn't usable\",\n  \"details\": \"if valid: describe face shape, hair length, hair type/texture, hair color, and any relevant features for styling. If invalid: empty string.\"\n}",
+        "inputType": "base64",
+        "binaryPropertyName": "photo",
+        "options": {
+          "detail": "auto",
+          "maxTokens": 600
+        }
+      },
+      "id": "afbf8980-39f9-4c2a-ae1a-633ee3eab325",
+      "name": "Analyze Photo",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.3,
+      "position": [
+        -2128,
+        -64
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": null,
+          "name": "Gateway credits",
+          "__aiGatewayManaged": true
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "// Pull the model's text output from whichever field it lands in\nconst raw = $json.content ?? $json.text ?? $json.message?.content ?? JSON.stringify($json);\nlet parsed = { is_valid: false, reason: \"Could not read the analysis result.\", details: \"\" };\ntry {\n  const match = String(raw).match(/\\{[\\s\\S]*\\}/);\n  if (match) {\n    parsed = JSON.parse(match[0]);\n  }\n} catch (e) {\n  parsed = { is_valid: false, reason: \"The analysis could not be parsed.\", details: \"\" };\n}\n// details may come back as an object or a string — normalise to readable text\nlet details = parsed.details;\nif (details && typeof details === \"object\") {\n  details = Object.entries(details)\n    .map(([k, v]) => k.replace(/_/g, \" \") + \": \" + v)\n    .join(\"; \");\n}\nreturn {\n  json: {\n    is_valid: parsed.is_valid === true,\n    reason: parsed.reason || \"\",\n    details: details || \"\",\n  },\n};"
+      },
+      "id": "24cae07f-3bdb-4ff3-b961-2584db5e4a75",
+      "name": "Parse Analysis",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1808,
+        -64
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "a1b2c3d4-0001-4000-8000-000000000001",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              },
+              "leftValue": "={{ $json.is_valid }}",
+              "rightValue": ""
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "90b06dd7-f7d1-413c-acc0-3088f46f5467",
+      "name": "Is Photo Valid?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -1488,
+        -64
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=A customer photo has been analyzed. Here are the details:\n\n{{ $json.details }}\n\nBased on these features, recommend suitable hairstyles for this customer.",
+        "options": {
+          "systemMessage": "You are an expert hair stylist and image consultant. Given a description of a customer's facial features and current hair, recommend 2-3 specific hairstyles that would suit them.\n\nFor each recommendation include:\n- the hairstyle name\n- why it flatters their face shape and works with their hair type/length/texture\n- rough maintenance/effort level\n\nWrite in a warm, encouraging, professional tone. Output plain readable text (no markdown headings), suitable to show directly to the customer."
+        }
+      },
+      "id": "7746c31d-10e9-4e84-af1a-d8f2f2791b61",
+      "name": "Hairstyle Designer",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -1168,
+        -176
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "487bde96-fd2a-4add-ba11-36911185d768",
+      "name": "DeepSeek Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatDeepSeek",
+      "typeVersion": 1,
+      "position": [
+        -1232,
+        -16
+      ],
+      "credentials": {
+        "deepSeekApi": {
+          "id": "njiT4X8e0ktDE3gJ",
+          "name": "DeepSeek account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "completion",
+        "respondWith": "showText",
+        "responseText": "={{ '<h2>Your Hairstyle Recommendations</h2><p>' + $json.output.replace(/\\n/g, '<br>') + '</p>' }}"
+      },
+      "id": "99f0d173-1fdb-4794-97f2-fce06cabea50",
+      "name": "Show Recommendation",
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.5,
+      "position": [
+        -848,
+        -176
+      ],
+      "webhookId": "dce8703d-c39c-474b-bb42-5790fb104d67"
+    },
+    {
+      "parameters": {
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Your photo",
+              "fieldType": "file",
+              "fieldName": "photo",
+              "multipleFiles": false,
+              "acceptFileTypes": ".jpg,.jpeg,.png,.webp",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {
+          "formTitle": "We need a clearer photo",
+          "formDescription": "={{ $json.reason || 'The photo could not be used.' }} Please upload a clear, well-lit photo showing one person's full head and current hair."
+        }
+      },
+      "id": "2b647649-7a4e-460c-a6d2-789947388bfa",
+      "name": "Ask For New Photo",
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.5,
+      "position": [
+        -1168,
+        96
+      ],
+      "webhookId": "4de5c3e3-39f2-4fa6-b565-c2fd3b0bd3dd"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Photo Upload": {
+      "main": [
+        [
+          {
+            "node": "Analyze Photo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyze Photo": {
+      "main": [
+        [
+          {
+            "node": "Parse Analysis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Analysis": {
+      "main": [
+        [
+          {
+            "node": "Is Photo Valid?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is Photo Valid?": {
+      "main": [
+        [
+          {
+            "node": "Hairstyle Designer",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Ask For New Photo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Hairstyle Designer": {
+      "main": [
+        [
+          {
+            "node": "Show Recommendation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "DeepSeek Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Hairstyle Designer",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ask For New Photo": {
+      "main": [
+        [
+          {
+            "node": "Analyze Photo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "955245b8-bf6b-453f-8672-7ac7245ecded",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "8909c94c84c0eed953bdb33bf06010d37fc361b4e5c42ea81d62b3d39a8eebff"
+  },
+  "nodeGroups": [],
+  "id": "9iGQiM9RbNZY06Jm",
+  "tags": []
+}

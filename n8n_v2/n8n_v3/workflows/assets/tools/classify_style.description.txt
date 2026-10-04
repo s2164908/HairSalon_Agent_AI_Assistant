@@ -1,0 +1,1 @@
+Classify a described hairstyle against the controlled bilingual taxonomy. Longest matching term wins; a genuine tie returns clarification_required with candidates. Never infer age, ethnicity or hair properties. Input JSON: {"text":"long bob"}.

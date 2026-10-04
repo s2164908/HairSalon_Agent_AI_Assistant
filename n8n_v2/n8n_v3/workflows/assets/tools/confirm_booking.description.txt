@@ -1,0 +1,1 @@
+Convert an unexpired hold into a confirmed appointment. Returns not_configured in this draft. Never treat a tool failure as success. Input JSON: {"hold_id":"hold_123"}.

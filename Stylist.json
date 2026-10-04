@@ -1,0 +1,245 @@
+{
+  "name": "Stylist",
+  "nodes": [
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Start').item.json.sessionId }}",
+        "contextWindowLength": 15
+      },
+      "id": "0c91a786-4f62-40c7-8ff7-a5d7870f416c",
+      "name": "Simple Memory",
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        1840,
+        768
+      ]
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"hairstyle\": {\n      \"type\": \"string\",\n      \"description\": \"The specific hairstyle the customer has decided on (e.g. Fade, Undercut, Buzz Cut, Pompadour, Crew Cut, Long Layers), or empty string if not decided yet\"\n    },\n    \"stylist\": {\n      \"type\": \"string\",\n      \"description\": \"The roster stylist matched to the chosen hairstyle. Must be one of the roster stylists. Empty string until a stylist has been matched and the customer has confirmed.\"\n    },\n    \"reply\": {\n      \"type\": \"string\",\n      \"description\": \"The natural-language message to show the customer (advice, suggestions, questions, or confirmation of the hairstyle and matched stylist)\"\n    }\n  },\n  \"required\": [\n    \"hairstyle\",\n    \"stylist\",\n    \"reply\"\n  ]\n}"
+      },
+      "id": "8b9bafc4-5df0-470b-a1d5-9ead42861d24",
+      "name": "Match Parser",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        1984,
+        768
+      ]
+    },
+    {
+      "parameters": {
+        "model": "deepseek-flash",
+        "options": {}
+      },
+      "id": "b6c57c4c-5f72-401e-b6b4-48788ce6e4e1",
+      "name": "DeepSeek Chat Model1",
+      "type": "@n8n/n8n-nodes-langchain.lmChatDeepSeek",
+      "typeVersion": 1,
+      "position": [
+        1712,
+        768
+      ],
+      "credentials": {
+        "deepSeekApi": {
+          "id": "FNxtZECR4n8py6Ki",
+          "name": "DeepSeek account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "gGiYb3Y4vhA4BZjd",
+          "cachedResultName": "Salon Stylists"
+        },
+        "returnAll": true
+      },
+      "id": "99817224-24e5-4971-aecf-93f0bbb1291e",
+      "name": "Get Stylists",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        1264,
+        528
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const rows = $input.all().map(i => i.json).filter(r => r.active === true || r.active === 'true');\nconst roster = rows.length\n  ? rows.map(r => `- ${r.name} — specialises in ${r.specialty} (${r.styles}).`).join('\\n')\n  : 'No stylists are currently available.';\nreturn [{ json: { roster } }];"
+      },
+      "id": "1489abb9-e8ca-4f8b-a9b8-e3f085ebf10f",
+      "name": "Build Roster",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1488,
+        528
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $('Start').item.json.chatInput }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=You are a friendly barbershop styling advisor. Your ONLY job is to help the customer decide on a hairstyle and match them with the right stylist from the roster. You do NOT collect names, contact details, dates, times, or make bookings — a separate booking assistant handles that.\n\nBARBERSHOP STYLIST ROSTER (only ever match customers to these people):\n{{ $('Build Roster').item.json.roster }}\n\nHAIRSTYLE & STYLIST MATCHING:\n- Talk with the customer about the hairstyle they want. If they are unsure, suggest options and give brief, friendly advice to help them decide. Once they have clearly decided, put it in \"hairstyle\".\n- Based on the chosen hairstyle, recommend the best-matching stylist from the roster above and explain in one short sentence why they fit. Confirm the customer is happy with that stylist (or let them pick another roster stylist) before setting \"stylist\". Only ever use a name from the roster — never invent a stylist.\n\nThe conversation happens over several turns. On every turn, review the ENTIRE conversation so far (including memory of previous messages). Return \"hairstyle\" and \"stylist\" as soon as each is decided and confirmed; return an empty string (\"\") for anything not yet decided — never guess.\n\nIn the \"reply\" field, write a warm, conversational message: give hairstyle advice, ask follow-up questions if the customer is undecided, or confirm the chosen hairstyle and matched stylist once both are set. Do not ask for booking details."
+        }
+      },
+      "id": "361f8b62-4316-4dc7-b326-ea2bf8731606",
+      "name": "Hairstyle & Stylist Matcher",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        1776,
+        528
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1f0a2b3c-4d5e-6f70-8a9b-0c1d2e3f4a5b",
+              "name": "hairstyle",
+              "value": "={{ $json.output.hairstyle }}",
+              "type": "string"
+            },
+            {
+              "id": "2a1b0c9d-8e7f-6051-4a3b-2c1d0e9f8a7b",
+              "name": "stylist",
+              "value": "={{ $json.output.stylist }}",
+              "type": "string"
+            },
+            {
+              "id": "3b2c1d0e-9f8a-7162-5b4c-3d2e1f0a9b8c",
+              "name": "reply",
+              "value": "={{ $json.output.reply }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "69f4bb4e-e1e9-4201-b6dc-4a9de84b4750",
+      "name": "Result",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        2176,
+        528
+      ]
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "id": "e63b4bdd-eb4d-4b4b-885f-07adde8ea9bd",
+      "typeVersion": 1.1,
+      "name": "Start",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "position": [
+        1056,
+        528
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "Hairstyle & Stylist Matcher",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Match Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Hairstyle & Stylist Matcher",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Stylists": {
+      "main": [
+        [
+          {
+            "node": "Build Roster",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Roster": {
+      "main": [
+        [
+          {
+            "node": "Hairstyle & Stylist Matcher",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Hairstyle & Stylist Matcher": {
+      "main": [
+        [
+          {
+            "node": "Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "DeepSeek Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Hairstyle & Stylist Matcher",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "Get Stylists",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "0fa44cea-cab5-4543-9fdb-1719fb86fc87",
+  "meta": {
+    "instanceId": "8909c94c84c0eed953bdb33bf06010d37fc361b4e5c42ea81d62b3d39a8eebff"
+  },
+  "nodeGroups": [],
+  "id": "EhASlQjX6LHWQdQ9",
+  "tags": []
+}

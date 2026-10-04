@@ -1,0 +1,68 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "intent",
+    "service_ids",
+    "promotion_ids",
+    "stylist_ids",
+    "taxonomy_id",
+    "question",
+    "escalate"
+  ],
+  "properties": {
+    "intent": {
+      "type": "string",
+      "enum": [
+        "greeting",
+        "catalog",
+        "promotions",
+        "style",
+        "stylist",
+        "profile",
+        "booking",
+        "escalation",
+        "clarify"
+      ]
+    },
+    "service_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "promotion_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "stylist_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "taxonomy_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "question": {
+      "type": "string",
+      "enum": [
+        "none",
+        "service",
+        "style",
+        "texture",
+        "language",
+        "budget",
+        "profile_consent"
+      ]
+    },
+    "escalate": {
+      "type": "boolean"
+    }
+  }
+}

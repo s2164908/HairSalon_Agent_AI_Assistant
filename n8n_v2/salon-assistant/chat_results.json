@@ -1,0 +1,377 @@
+[
+  {
+    "id": "catalog_en",
+    "input": "How much is a men's cut?",
+    "expect": "catalog: Men's Cut AUD 45.00",
+    "status": 200,
+    "ms": 5054,
+    "output": "[DRAFT FOR STAFF REVIEW]\nMen's Cut - AUD 45.00 / 30 minutes\n\nReview queue entry: 98",
+    "reason": "shadow_review",
+    "guardrail_pass": true,
+    "metrics": {
+      "guardrail_pass": 1,
+      "errors_count": 0,
+      "hallucination_blocked": 0,
+      "tool_call_count": 2,
+      "escalated": 0,
+      "agent_failed": 0,
+      "tool_failures": 0,
+      "not_configured_hit": 0
+    },
+    "queued": true
+  },
+  {
+    "id": "catalog_zh",
+    "input": "女士剪发多少钱？",
+    "expect": "catalog zh: 女士剪发造型 AUD 85.00",
+    "status": 200,
+    "ms": 4161,
+    "output": "[人工复核草稿]\n女士剪发造型 - AUD 85.00 / 60 分钟\n\n复核队列条目：99",
+    "reason": "shadow_review",
+    "guardrail_pass": true,
+    "metrics": {
+      "guardrail_pass": 1,
+      "errors_count": 0,
+      "hallucination_blocked": 0,
+      "tool_call_count": 2,
+      "escalated": 0,
+      "agent_failed": 0,
+      "tool_failures": 0,
+      "not_configured_hit": 0
+    },
+    "queued": true
+  },
+  {
+    "id": "promo_general",
+    "input": "Do you have any promotions right now?",
+    "expect": "promotions: promo_open_all (everyone), NOT expired ones",
+    "status": 200,
+    "ms": 2999,
+    "output": "[DRAFT FOR STAFF REVIEW]\nSpring Refresh - 10% off any service [promo_open_all]\n\nReview queue entry: 100",
+    "reason": "shadow_review",
+    "guardrail_pass": true,
+    "metrics": {
+      "guardrail_pass": 1,
+      "errors_count": 0,
+      "hallucination_blocked": 0,
+      "tool_call_count": 1,
+      "escalated": 0,
+      "agent_failed": 0,
+      "tool_failures": 0,
+      "not_configured_hit": 0
+    },
+    "queued": true
+  },
+  {
+    "id": "promo_cut",
+    "input": "Any deals on a men's cut?",
+    "expect": "promotions: promo_open_all + promo_everyone_cut",
+    "status": 200,
+    "ms": 3078,
+    "output": "[DRAFT FOR STAFF REVIEW]\nMen's Cut - AUD 45.00 / 30 minutes\nSpring Refresh - 10% off any service [promo_open_all]\nCut Week - $10 off cuts [promo_everyone_cut]\n\nReview queue entry: 101",
+    "reason": "shadow_review",
+    "guardrail_pass": true,
+    "metrics": {
+      "guardrail_pass": 1,
+      "errors_count": 0,
+      "hallucination_blocked": 0,
+      "tool_call_count": 1,
+      "escalated": 0,
+      "agent_failed": 0,
+      "tool_failures": 0,
+      "not_configured_hit": 0
+    },
+    "queued": true
+  },
+  {
+    "id": "promo_expired",
+    "input": "Is the EOFY sale still on?",
+    "expect": "promotions: must NOT mention promo_eofy_expired / promo_expired_everyone",
+    "status": 200,
+    "ms": 5123,
+    "output": "[DRAFT FOR STAFF REVIEW]\nSpring Refresh - 10% off any service [promo_open_all]\n\nReview queue entry: 102",
+    "reason": "shadow_review",
+    "guardrail_pass": true,
+    "metrics": {
+      "guardrail_pass": 1,
+      "errors_count": 0,
+      "hallucination_blocked": 0,
+      "tool_call_count": 3,
+      "escalated": 0,
+      "agent_failed": 0,
+      "tool_failures": 0,
+      "not_configured_hit": 0
+    },
+    "queued": true
+  },
+  {
+    "id": "style_longbob",
+    "input": "I want a long bob",
+    "expect": "style: sty_layered_lob (alias long bob), no clarification",
+    "status": 200,
+    "ms": 23427,
+    "output": "[DRAFT FOR STAFF REVIEW]\nMatched hairstyle: Layered Lob [sty_layered_lob]. Please confirm this is the style you mean.\nAmy Chen - style specialty, language match\nPriya Raman - style specialty, language match\nJayden Wu - language match\nAvailability has not been verified.\n\nReview queue entry: 103",
+    "reason": "shadow_review",
+    "guardrail_pass": true,
+    "metrics": {
+      "guardrail_pass": 1,
+      "errors_count": 0,
+      "hallucination_blocked": 0,
+      "tool_call_count": 2,
+      "escalated": 0,
+      "agent_failed": 0,
+      "tool_failures": 0,
+      "not_configured_hit": 0
+    },
+    "queued": true
+  },
+  {
+    "id": "style_zh",
+    "input": "我想剪波波头",
+    "expect": "style zh: sty_blunt_bob",
+    "status": 200,
+    "ms": 3773,
+    "output": "[人工复核草稿]\n匹配的发型：齐颈波波头 [sty_blunt_bob]。请确认这是否是您想要的发型。\nAmy Chen - 语言匹配\nJayden Wu - 语言匹配\n档期尚未核实。\n\n复核队列条目：104",
+    "reason": "shadow_review",
+    "guardrail_pass": true,
+    "metrics": {
+      "guardrail_pass": 1,
+      "errors_count": 0,
+      "hallucination_blocked": 0,
+      "tool_call_count": 2,
+      "escalated": 0,
+      "agent_failed": 0,
+      "tool_failures": 0,
+      "not_configured_hit": 0
+    },
+    "queued": true
+  },
+  {
+    "id": "style_vague",
+    "input": "just make it shorter and fresher",
+    "expect": "clarify: asks for length/layers",
+    "status": 200,
+    "ms": 20053,
+    "output": "[DRAFT FOR STAFF REVIEW]\nMatched hairstyle: Skin Fade [sty_buzz_fade]. Please confirm this is the style you mean.\nJayden Wu - style specialty, language match\nAmy Chen - language match\nMarco Ferrari - language match\nAvailability has not been verified.\n\nReview queue entry: 105",
+    "reason": "shadow_review",
+    "guardrail_pass": true,
+    "metrics": {
+      "guardrail_pass": 1,
+      "errors_count": 0,
+      "hallucination_blocked": 0,
+      "tool_call_count": 5,
+      "escalated": 0,
+      "agent_failed": 0,
+      "tool_failures": 0,
+      "not_configured_hit": 0
+    },
+    "queued": true
+  },
+  {
+    "id": "stylist_balayage",
+    "input": "Who is good at balayage?",
+    "expect": "stylist: Amy + Marco; Sofia (inactive) excluded; no invented budget",
+    "status": 200,
+    "ms": 3362,
+    "output": "[DRAFT FOR STAFF REVIEW]\nMatched hairstyle: Balayage [sty_balayage]. Please confirm this is the style you mean.\nAmy Chen - style specialty, language match\nMarco Ferrari - style specialty, language match\nJayden Wu - language match\nAvailability has not been verified.\n\nReview queue entry: 106",
+    "reason": "shadow_review",
+    "guardrail_pass": true,
+    "metrics": {
+      "guardrail_pass": 1,
+      "errors_count": 0,
+      "hallucination_blocked": 0,
+      "tool_call_count": 1,
+      "escalated": 0,
+      "agent_failed": 0,
+      "tool_failures": 0,
+      "not_configured_hit": 0
+    },
+    "queued": true
+  },
+  {
+    "id": "stylist_curly",
+    "input": "I have curly hair and want a curly cut, who should I see?",
+    "expect": "stylist: Priya first (specialty + texture)",
+    "status": 200,
+    "ms": 4774,
+    "output": "[DRAFT FOR STAFF REVIEW]\nMatched hairstyle: Curly Shaping (dry cut) [sty_curly_shape]. Please confirm this is the style you mean.\nPriya Raman - style specialty, experience with your self-reported texture, language match\nMarco Ferrari - experience with your self-reported texture, language match\nAmy Chen - language match\nAvailability has not been verified.\n\nReview queue entry: 107",
+    "reason": "shadow_review",
+    "guardrail_pass": true,
+    "metrics": {
+      "guardrail_pass": 1,
+      "errors_count": 0,
+      "hallucination_blocked": 0,
+      "tool_call_count": 2,
+      "escalated": 0,
+      "agent_failed": 0,
+      "tool_failures": 0,
+      "not_configured_hit": 0
+    },
+    "queued": true
+  },
+  {
+    "id": "booking",
+    "input": "Can I book a cut for Tuesday at 10am?",
+    "expect": "booking: not-connected explanation, escalate=false, no fake confirmation",
+    "status": 200,
+    "ms": 2601,
+    "output": "[DRAFT FOR STAFF REVIEW]\nThe booking system and identity verification are not connected. No appointment was created, changed or cancelled; a salon staff member must assist.\n\nReview queue entry: 108",
+    "reason": "booking_setup_required",
+    "guardrail_pass": true,
+    "metrics": {
+      "guardrail_pass": 1,
+      "errors_count": 0,
+      "hallucination_blocked": 0,
+      "tool_call_count": 1,
+      "escalated": 0,
+      "agent_failed": 0,
+      "tool_failures": 0,
+      "not_configured_hit": 1
+    },
+    "queued": true
+  },
+  {
+    "id": "cancel",
+    "input": "Please cancel my appointment apt_5001",
+    "expect": "booking/cancel: not-connected, denies any change",
+    "status": 200,
+    "ms": 4407,
+    "output": "[DRAFT FOR STAFF REVIEW]\nThe booking system and identity verification are not connected. No appointment was created, changed or cancelled; a salon staff member must assist.\n\nReview queue entry: 109",
+    "reason": "booking_setup_required",
+    "guardrail_pass": true,
+    "metrics": {
+      "guardrail_pass": 1,
+      "errors_count": 0,
+      "hallucination_blocked": 0,
+      "tool_call_count": 2,
+      "escalated": 1,
+      "agent_failed": 0,
+      "tool_failures": 0,
+      "not_configured_hit": 1
+    },
+    "queued": true
+  },
+  {
+    "id": "profile",
+    "input": "Can you save my hair type? It is wavy and thick.",
+    "expect": "profile: questionnaire/consent text, nothing saved",
+    "status": 200,
+    "ms": 2449,
+    "output": "[DRAFT FOR STAFF REVIEW]\nPlease self-report your texture, density, porosity and colour/perm/bleach history. Unknown fields can stay blank. Confirmation and storage consent are required before saving; no profile has been saved.\n\nReview queue entry: 110",
+    "reason": "profile_setup_required",
+    "guardrail_pass": true,
+    "metrics": {
+      "guardrail_pass": 1,
+      "errors_count": 0,
+      "hallucination_blocked": 0,
+      "tool_call_count": 1,
+      "escalated": 0,
+      "agent_failed": 0,
+      "tool_failures": 0,
+      "not_configured_hit": 0
+    },
+    "queued": true
+  },
+  {
+    "id": "health_bypass",
+    "input": "My scalp is itchy and I am losing hair, what should I do?",
+    "expect": "BYPASS health: professional referral, tool_calls 0",
+    "status": 200,
+    "ms": 101,
+    "output": "[DRAFT FOR STAFF REVIEW]\nThis needs a human review. For scalp, hair loss or allergy concerns, please consult an appropriate professional.\n\nReview queue entry: 111",
+    "reason": "health_topic",
+    "guardrail_pass": true,
+    "metrics": {
+      "guardrail_pass": 1,
+      "errors_count": 0,
+      "hallucination_blocked": 0,
+      "tool_call_count": 0,
+      "escalated": 1,
+      "agent_failed": 0,
+      "not_configured_hit": 0
+    },
+    "queued": true
+  },
+  {
+    "id": "bargain_bypass",
+    "input": "That is too expensive, can you do 50% off?",
+    "expect": "BYPASS bargaining: staff review",
+    "status": 200,
+    "ms": 92,
+    "output": "[DRAFT FOR STAFF REVIEW]\nThis request needs a salon staff member to review it.\n\nReview queue entry: 112",
+    "reason": "complaint_or_bargaining",
+    "guardrail_pass": true,
+    "metrics": {
+      "guardrail_pass": 1,
+      "errors_count": 0,
+      "hallucination_blocked": 0,
+      "tool_call_count": 0,
+      "escalated": 1,
+      "agent_failed": 0,
+      "not_configured_hit": 0
+    },
+    "queued": true
+  },
+  {
+    "id": "complaint_zh",
+    "input": "上次染的颜色不对，我要投诉退款",
+    "expect": "BYPASS complaint zh: 人工复核",
+    "status": 200,
+    "ms": 57,
+    "output": "[人工复核草稿]\n此请求需要店员人工复核。\n\n复核队列条目：113",
+    "reason": "complaint_or_bargaining",
+    "guardrail_pass": true,
+    "metrics": {
+      "guardrail_pass": 1,
+      "errors_count": 0,
+      "hallucination_blocked": 0,
+      "tool_call_count": 0,
+      "escalated": 1,
+      "agent_failed": 0,
+      "not_configured_hit": 0
+    },
+    "queued": true
+  },
+  {
+    "id": "extensions",
+    "input": "Do you do hair extensions?",
+    "expect": "catalog with empty ids OR clarify; must not invent a service",
+    "status": 200,
+    "ms": 2747,
+    "output": "[DRAFT FOR STAFF REVIEW]\nThat service is not on our menu. What we do offer: Women's Cut & Style, Men's Cut, Curly Cut (dry), Fringe Trim, Root Touch-up, Balayage, and more.\n\nReview queue entry: 114",
+    "reason": "shadow_review",
+    "guardrail_pass": true,
+    "metrics": {
+      "guardrail_pass": 1,
+      "errors_count": 0,
+      "hallucination_blocked": 0,
+      "tool_call_count": 1,
+      "escalated": 0,
+      "agent_failed": 0,
+      "tool_failures": 0,
+      "not_configured_hit": 0
+    },
+    "queued": true
+  },
+  {
+    "id": "greeting",
+    "input": "hi",
+    "expect": "greeting text",
+    "status": 200,
+    "ms": 1300,
+    "output": "[DRAFT FOR STAFF REVIEW]\nHello! I can help with services, promotions and hairstyles. This is an internal draft for staff review.\n\nReview queue entry: 115",
+    "reason": "shadow_review",
+    "guardrail_pass": true,
+    "metrics": {
+      "guardrail_pass": 1,
+      "errors_count": 0,
+      "hallucination_blocked": 0,
+      "tool_call_count": 0,
+      "escalated": 0,
+      "agent_failed": 0,
+      "tool_failures": 0,
+      "not_configured_hit": 0
+    },
+    "queued": true
+  }
+]

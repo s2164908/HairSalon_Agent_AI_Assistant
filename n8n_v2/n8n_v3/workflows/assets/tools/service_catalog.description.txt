@@ -1,0 +1,1 @@
+Service names, durations and list prices. Both fields OPTIONAL: omit both for the whole catalogue; if the customer names a service, pass their words as service_query and the tool resolves it. Never invent a service_id. Not for discounts. Input JSON: {} or {"service_query":"men's cut"}.

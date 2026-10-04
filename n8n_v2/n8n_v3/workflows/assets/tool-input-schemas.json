@@ -1,0 +1,143 @@
+{
+  "service_catalog": {
+    "type": "object",
+    "additionalProperties": true,
+    "properties": {
+      "service_id": {
+        "type": "string"
+      },
+      "service_query": {
+        "type": "string"
+      }
+    },
+    "required": []
+  },
+  "get_promotions": {
+    "type": "object",
+    "additionalProperties": true,
+    "properties": {
+      "service_id": {
+        "type": "string"
+      },
+      "service_query": {
+        "type": "string"
+      }
+    },
+    "required": []
+  },
+  "classify_style": {
+    "type": "object",
+    "additionalProperties": true,
+    "properties": {
+      "text": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "text"
+    ]
+  },
+  "match_stylist": {
+    "type": "object",
+    "additionalProperties": true,
+    "properties": {
+      "style_query": {
+        "type": "string"
+      },
+      "taxonomy_id": {
+        "type": "string"
+      },
+      "texture": {
+        "type": "string"
+      },
+      "language": {
+        "type": "string"
+      },
+      "max_price_tier": {
+        "type": "number"
+      }
+    },
+    "required": []
+  },
+  "hair_profile_read": {
+    "type": "object",
+    "additionalProperties": true,
+    "properties": {},
+    "required": []
+  },
+  "find_slots": {
+    "type": "object",
+    "additionalProperties": true,
+    "properties": {
+      "service_id": {
+        "type": "string"
+      }
+    },
+    "required": []
+  },
+  "hold_slot": {
+    "type": "object",
+    "additionalProperties": true,
+    "properties": {
+      "slot_id": {
+        "type": "string"
+      }
+    },
+    "required": []
+  },
+  "confirm_booking": {
+    "type": "object",
+    "additionalProperties": true,
+    "properties": {
+      "hold_id": {
+        "type": "string"
+      }
+    },
+    "required": []
+  },
+  "cancel_reschedule": {
+    "type": "object",
+    "additionalProperties": true,
+    "properties": {
+      "appointment_id": {
+        "type": "string"
+      },
+      "action": {
+        "type": "string"
+      }
+    },
+    "required": []
+  },
+  "hair_profile_write": {
+    "type": "object",
+    "additionalProperties": true,
+    "properties": {
+      "texture": {
+        "type": "string"
+      },
+      "density": {
+        "type": "string"
+      },
+      "porosity": {
+        "type": "string"
+      },
+      "customer_confirmed": {
+        "type": "boolean"
+      },
+      "confirmed_utterance": {
+        "type": "string"
+      }
+    },
+    "required": []
+  },
+  "escalate_to_human": {
+    "type": "object",
+    "additionalProperties": true,
+    "properties": {
+      "reason": {
+        "type": "string"
+      }
+    },
+    "required": []
+  }
+}
